@@ -4,612 +4,306 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>About — Nevin Kohler</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --ink: #1a1714;
-      --warm-mid: #4a4340;
-      --warm-light: #8c7e78;
-      --cream: #f5f0ea;
-      --parchment: #ede6db;
-      --amber: #c17f3b;
-      --amber-light: #d9a05a;
-      --rule: #d4c9bc;
-      --white: #fdfaf6;
+      --bg-0:#0a0a0a; --bg-1:#111111; --bg-2:#1a1a1a; --bg-3:#222222;
+      --border:#222222; --border-hi:#333333;
+      --t1:#eeeeee; --t2:#888888; --t3:#444444;
+      --blue:#3b82f6; --blue-bg:rgba(59,130,246,0.08); --blue-border:rgba(59,130,246,0.2);
+      --green:#22c55e; --green-bg:rgba(34,197,94,0.08); --green-border:rgba(34,197,94,0.2);
+      --amber:#f59e0b;
     }
+    html { font-size:16px; scroll-behavior:smooth; }
+    body { font-family:'Inter',sans-serif; background:var(--bg-0); color:var(--t2); line-height:1.6; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
 
-    html { font-size: 16px; scroll-behavior: smooth; }
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; height:52px; display:flex; align-items:center; justify-content:space-between; padding:0 1.5rem; background:rgba(10,10,10,0.85); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+    .nav-left { display:flex; align-items:center; gap:1.5rem; }
+    .nav-logo { font-size:0.875rem; font-weight:600; color:var(--t1); text-decoration:none; letter-spacing:-0.02em; }
+    .nav-sep { width:1px; height:16px; background:var(--border); }
+    .nav-links { display:flex; list-style:none; }
+    .nav-links a { font-size:0.8125rem; color:var(--t3); text-decoration:none; padding:0.25rem 0.625rem; border-radius:5px; transition:color 0.1s,background 0.1s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--t1); background:var(--bg-2); }
+    .nav-right { display:flex; align-items:center; gap:0.75rem; }
+    .badge { font-size:0.6875rem; font-weight:500; color:var(--green); background:var(--green-bg); border:1px solid var(--green-border); padding:0.175rem 0.55rem; border-radius:99px; }
+    .btn-nav { font-size:0.8125rem; font-weight:500; color:#000; background:var(--t1); padding:0.375rem 0.875rem; border-radius:6px; text-decoration:none; transition:opacity 0.15s; }
+    .btn-nav:hover { opacity:0.85; }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--white);
-      color: var(--ink);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
+    .page { max-width:1100px; margin:0 auto; padding:0 1.5rem; }
 
-    /* ── NAV ─────────────────────────────── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 1.25rem 3rem;
-      display: flex; justify-content: space-between; align-items: center;
-      background: rgba(253,250,246,0.92);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--rule);
-    }
-    .nav-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem; font-weight: 400;
-      letter-spacing: 0.04em; color: var(--ink); text-decoration: none;
-    }
-    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-    .nav-links a {
-      font-size: 0.8rem; font-weight: 500; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--warm-mid); text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover, .nav-links a.active { color: var(--amber); }
+    /* HERO */
+    .hero { padding-top:52px; border-bottom:1px solid var(--border); }
+    .hero-inner { display:grid; grid-template-columns:1fr 1fr; min-height:440px; }
+    .hero-left { display:flex; flex-direction:column; justify-content:center; padding:4rem 3rem 4rem 0; }
+    .hero-label { font-size:0.6875rem; font-weight:500; color:var(--t3); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:1.25rem; opacity:0; animation:up 0.4s 0.1s forwards; }
+    .hero-h1 { font-size:clamp(2rem,4vw,3.5rem); font-weight:600; letter-spacing:-0.04em; color:var(--t1); line-height:1.05; margin-bottom:1.25rem; opacity:0; animation:up 0.5s 0.2s forwards; }
+    .hero-h1 .muted { color:var(--t3); font-weight:400; }
+    .hero-p { font-size:0.9375rem; font-weight:300; color:var(--t2); line-height:1.8; max-width:420px; opacity:0; animation:up 0.5s 0.35s forwards; }
 
-    /* ── HERO ────────────────────────────── */
-    .hero {
-      padding-top: 70px;
-      background: var(--cream);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 52vh;
-    }
+    .hero-right { border-left:1px solid var(--border); display:flex; flex-direction:column; }
+    .hero-photo-wrap { flex:1; overflow:hidden; position:relative; min-height:260px; }
+    .hero-photo { width:100%; height:100%; object-fit:cover; object-position:center 18%; display:block; filter:grayscale(100%); opacity:0.55; }
+    .hero-specs { border-top:1px solid var(--border); }
+    .spec-row { display:grid; grid-template-columns:88px 1fr; gap:1rem; padding:0.75rem 1.5rem; border-bottom:1px solid var(--border); font-size:0.8rem; }
+    .spec-row:last-child { border-bottom:none; }
+    .spec-k { font-family:'JetBrains Mono',monospace; font-size:0.6875rem; color:var(--t3); padding-top:0.05rem; }
+    .spec-v { color:var(--t2); font-weight:300; }
 
-    .hero-left {
-      padding: 5rem 4rem 5rem 5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
+    /* CONTENT LAYOUT */
+    .content-grid { display:grid; grid-template-columns:200px 1fr; border-top:1px solid var(--border); }
+    .sidebar { padding:3rem 0; border-right:1px solid var(--border); position:sticky; top:52px; height:fit-content; }
+    .sidebar-label { font-size:0.6875rem; font-weight:500; color:var(--t3); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:1rem; padding:0 1.5rem; }
+    .sidebar-nav { list-style:none; }
+    .sidebar-nav a { display:block; font-size:0.8125rem; color:var(--t3); text-decoration:none; padding:0.5rem 1.5rem; transition:color 0.1s,background 0.1s; }
+    .sidebar-nav a:hover { color:var(--t1); background:var(--bg-1); }
 
-    .hero-eyebrow {
-      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--amber);
-      margin-bottom: 1.25rem;
-      opacity: 0; animation: fadeUp 0.6s 0.15s forwards;
-    }
+    /* BLOCKS */
+    .main-col { padding:0; }
+    .block { padding:3.5rem 3rem; border-bottom:1px solid var(--border); }
+    .block:last-child { border-bottom:none; }
+    .block-label { font-size:0.6875rem; font-weight:500; color:var(--t3); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem; }
+    .block-h { font-size:clamp(1.25rem,2vw,1.75rem); font-weight:600; letter-spacing:-0.03em; color:var(--t1); line-height:1.15; margin-bottom:1.5rem; }
+    .block-h .muted { color:var(--t3); font-weight:400; }
+    .prose { font-size:0.9rem; font-weight:300; color:var(--t2); line-height:1.85; max-width:600px; }
+    .prose p { margin-bottom:1.1rem; }
+    .prose p:last-child { margin-bottom:0; }
+    .prose .hl { color:var(--t1); }
 
-    .hero-headline {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.4rem, 4vw, 3.8rem);
-      font-weight: 300; line-height: 1.1; color: var(--ink);
-      margin-bottom: 1.5rem;
-      opacity: 0; animation: fadeUp 0.7s 0.25s forwards;
-    }
-    .hero-headline em { font-style: italic; color: var(--amber); }
+    /* PULL QUOTE */
+    .pull { border-left:2px solid var(--border-hi); padding:0.75rem 1.25rem; margin:1.75rem 0; }
+    .pull-text { font-size:0.9375rem; font-weight:300; color:var(--t2); line-height:1.75; font-style:italic; }
 
-    .hero-intro {
-      font-size: 1rem; font-weight: 300; color: var(--warm-mid);
-      line-height: 1.8; max-width: 460px;
-      opacity: 0; animation: fadeUp 0.7s 0.4s forwards;
-    }
+    /* EDU GRID */
+    .edu-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-top:1.75rem; }
+    .edu-card { background:var(--bg-1); padding:1.375rem; }
+    .edu-deg { font-size:0.875rem; font-weight:500; color:var(--t1); margin-bottom:0.3rem; letter-spacing:-0.01em; line-height:1.35; }
+    .edu-school { font-size:0.75rem; color:var(--blue); margin-bottom:0.5rem; font-weight:500; }
+    .edu-note { font-size:0.75rem; color:var(--t3); line-height:1.6; font-weight:300; }
 
-    .hero-right {
-      background: var(--parchment);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 2rem 4rem 4rem;
-      position: relative;
-      overflow: hidden;
-      min-height: 520px;
-    }
+    /* EXP TABLE */
+    .exp-table { width:100%; border-collapse:collapse; margin-top:1.75rem; }
+    .exp-table tr { border-bottom:1px solid var(--border); }
+    .exp-table tr:first-child { border-top:1px solid var(--border); }
+    .exp-table tr:hover td { background:var(--bg-1); }
+    .exp-table td { padding:1rem 1rem 1rem 0; font-size:0.8125rem; vertical-align:top; transition:background 0.1s; }
+    .exp-table td:not(:last-child) { padding-right:2rem; }
+    .td-org { font-family:'JetBrains Mono',monospace; font-size:0.6875rem; color:var(--t3); white-space:nowrap; }
+    .td-role { color:var(--t1); font-weight:400; }
+    .td-detail { color:var(--t3); font-size:0.75rem; font-weight:300; }
 
-    /* Photo styles */
-    .hero-right::before { content: none; }
+    /* PILLARS */
+    .pillars { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-top:1.75rem; }
+    .pillar { background:var(--bg-1); padding:1.375rem; transition:background 0.15s; }
+    .pillar:hover { background:var(--bg-2); }
+    .pillar-idx { font-family:'JetBrains Mono',monospace; font-size:0.6875rem; color:var(--t3); margin-bottom:0.5rem; }
+    .pillar-title { font-size:0.875rem; font-weight:500; color:var(--t1); margin-bottom:0.4rem; letter-spacing:-0.01em; }
+    .pillar-body { font-size:0.8rem; font-weight:300; color:var(--t2); line-height:1.7; }
 
-    .hero-photo-wrap {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 62%;
-      overflow: hidden;
-    }
+    /* BTNS */
+    .btn { display:inline-flex; align-items:center; gap:0.375rem; font-family:'Inter',sans-serif; font-size:0.875rem; font-weight:500; padding:0.5625rem 1.125rem; border-radius:7px; text-decoration:none; transition:all 0.15s; }
+    .btn-white { color:#000; background:var(--t1); }
+    .btn-white:hover { background:#d4d4d4; }
+    .btn-outline { color:var(--t2); background:transparent; border:1px solid var(--border); }
+    .btn-outline:hover { color:var(--t1); border-color:var(--border-hi); background:var(--bg-2); }
 
-    .hero-photo-wrap img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: center 15%;
-      display: block;
-    }
+    /* CTA */
+    .cta-wrap { border-top:1px solid var(--border); background:var(--bg-1); }
+    .cta { display:grid; grid-template-columns:1fr auto; gap:3rem; align-items:center; padding:4rem 0; }
+    .cta-h { font-size:clamp(1.25rem,2.5vw,1.875rem); font-weight:600; letter-spacing:-0.03em; color:var(--t1); line-height:1.15; margin-bottom:0.5rem; }
+    .cta-p { font-size:0.875rem; font-weight:300; color:var(--t2); line-height:1.75; }
+    .cta-btns { display:flex; flex-direction:column; gap:0.625rem; align-items:flex-start; }
 
-    .hero-photo-wrap::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 55%;
-      background: linear-gradient(to bottom, transparent, var(--parchment));
-    }
+    .footer-wrap { border-top:1px solid var(--border); }
+    .footer { display:flex; justify-content:space-between; align-items:center; padding:1.25rem 0; }
+    .footer-l { font-size:0.75rem; color:var(--t3); }
+    .footer-links { display:flex; gap:1.5rem; }
+    .footer-links a { font-size:0.75rem; color:var(--t3); text-decoration:none; transition:color 0.1s; }
+    .footer-links a:hover { color:var(--t1); }
 
-    .hero-detail-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-      position: relative; z-index: 1;
-      opacity: 0; animation: fadeUp 0.7s 0.45s forwards;
-    }
+    @keyframes up { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    .fi { opacity:0; transform:translateY(10px); transition:opacity 0.5s,transform 0.5s; }
+    .fi.on { opacity:1; transform:translateY(0); }
 
-    .hero-detail-item {
-      display: flex; gap: 1rem; align-items: baseline;
-    }
-
-    .detail-key {
-      font-size: 0.68rem; font-weight: 500; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--amber);
-      min-width: 80px; flex-shrink: 0;
-    }
-
-    .detail-val {
-      font-size: 0.88rem; font-weight: 300; color: var(--warm-mid);
-    }
-
-    /* ── STORY SECTION ───────────────────── */
-    .story-section {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 0;
-      border-top: 1px solid var(--rule);
-    }
-
-    .story-sidebar {
-      background: var(--ink);
-      padding: 5rem 3rem;
-      position: sticky;
-      top: 70px;
-      height: fit-content;
-    }
-
-    .sidebar-label {
-      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--amber); font-weight: 500; margin-bottom: 2rem;
-    }
-
-    .sidebar-nav { list-style: none; display: flex; flex-direction: column; gap: 0; }
-
-    .sidebar-nav-item a {
-      display: block;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem; font-weight: 300;
-      color: #5a524e; text-decoration: none;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid #2a2724;
-      transition: color 0.2s, padding-left 0.2s;
-      line-height: 1.3;
-    }
-    .sidebar-nav-item a:hover { color: var(--amber-light); padding-left: 0.5rem; }
-    .sidebar-nav-item:first-child a { border-top: 1px solid #2a2724; }
-
-    .story-main {
-      padding: 5rem 5rem 5rem 4rem;
-    }
-
-    /* Story block */
-    .story-block {
-      padding-bottom: 4rem;
-      margin-bottom: 4rem;
-      border-bottom: 1px solid var(--rule);
-    }
-    .story-block:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
-
-    .block-label {
-      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--amber); font-weight: 500; margin-bottom: 0.85rem;
-    }
-
-    .block-headline {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-      font-weight: 300; line-height: 1.2; color: var(--ink);
-      margin-bottom: 1.5rem;
-    }
-    .block-headline em { font-style: italic; color: var(--amber); }
-
-    .prose {
-      font-size: 0.93rem; font-weight: 300; color: var(--warm-mid);
-      line-height: 1.9; max-width: 620px;
-    }
-    .prose p { margin-bottom: 1.3rem; }
-    .prose p:last-child { margin-bottom: 0; }
-
-    /* Pull quote */
-    .pull-quote {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem; font-weight: 300; font-style: italic;
-      color: var(--ink); line-height: 1.5;
-      border-left: 3px solid var(--amber);
-      padding-left: 1.5rem;
-      margin: 2rem 0;
-    }
-
-    /* Education cards */
-    .edu-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
-      margin-top: 1.75rem;
-    }
-
-    .edu-card {
-      background: var(--cream); padding: 1.75rem;
-    }
-
-    .edu-degree {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem; font-weight: 400; color: var(--ink);
-      margin-bottom: 0.3rem; line-height: 1.3;
-    }
-
-    .edu-school {
-      font-size: 0.8rem; font-weight: 400; color: var(--amber);
-      letter-spacing: 0.05em; margin-bottom: 0.6rem;
-    }
-
-    .edu-note {
-      font-size: 0.8rem; font-weight: 300; color: var(--warm-light);
-      line-height: 1.6;
-    }
-
-    /* Industry timeline */
-    .industry-list {
-      display: flex; flex-direction: column; gap: 0;
-      margin-top: 1.75rem;
-    }
-
-    .industry-item {
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 1.5rem;
-      padding: 1.25rem 0;
-      border-bottom: 1px solid var(--rule);
-      align-items: start;
-    }
-    .industry-item:first-child { border-top: 1px solid var(--rule); }
-
-    .industry-org {
-      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--amber);
-      padding-top: 0.1rem; line-height: 1.4;
-    }
-
-    .industry-detail { }
-    .industry-role {
-      font-size: 0.9rem; font-weight: 400; color: var(--ink);
-      margin-bottom: 0.2rem;
-    }
-    .industry-desc {
-      font-size: 0.8rem; font-weight: 300; color: var(--warm-light);
-      line-height: 1.6;
-    }
-
-    /* Philosophy pillars */
-    .pillars {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
-      margin-top: 1.75rem;
-    }
-
-    .pillar {
-      background: var(--parchment); padding: 1.75rem;
-      border-top: 2px solid transparent;
-      transition: border-top-color 0.2s;
-    }
-    .pillar:hover { border-top-color: var(--amber); }
-
-    .pillar-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem; font-weight: 400; color: var(--ink);
-      margin-bottom: 0.6rem;
-    }
-    .pillar-body {
-      font-size: 0.82rem; font-weight: 300; color: var(--warm-mid);
-      line-height: 1.75;
-    }
-
-    /* ── BOTTOM CTA ──────────────────────── */
-    .bottom-cta {
-      background: var(--ink); padding: 5rem;
-      display: grid; grid-template-columns: 1fr auto;
-      gap: 3rem; align-items: center;
-    }
-
-    .bottom-cta-headline {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.8rem, 3vw, 2.8rem);
-      font-weight: 300; color: var(--cream); line-height: 1.2;
-    }
-    .bottom-cta-headline em { font-style: italic; color: var(--amber-light); }
-
-    .bottom-cta-body {
-      font-size: 0.88rem; font-weight: 300; color: #6b5f57;
-      margin-top: 0.75rem; line-height: 1.75;
-    }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.85rem 2rem; font-family: 'DM Sans', sans-serif;
-      font-size: 0.82rem; font-weight: 500; letter-spacing: 0.06em;
-      text-transform: uppercase; text-decoration: none;
-      border-radius: 2px; transition: all 0.25s; cursor: pointer;
-      white-space: nowrap;
-    }
-    .btn-primary { background: var(--amber); color: var(--white); border: 1.5px solid var(--amber); }
-    .btn-primary:hover { background: #a86e2e; border-color: #a86e2e; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(193,127,59,0.25); }
-    .btn-ghost-light { background: transparent; color: #8c7e78; border: 1.5px solid #3a3330; }
-    .btn-ghost-light:hover { border-color: #6b5f57; color: var(--cream); transform: translateY(-1px); }
-    .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
-
-    /* ── FOOTER ──────────────────────────── */
-    footer {
-      background: #111009; padding: 2rem 5rem;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .footer-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem; font-weight: 300; color: #3a3330; letter-spacing: 0.05em;
-    }
-    .footer-links { display: flex; gap: 2rem; }
-    .footer-links a {
-      font-size: 0.75rem; color: #3a3330; text-decoration: none;
-      letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s;
-    }
-    .footer-links a:hover { color: var(--amber-light); }
-
-    /* ── ANIMATIONS ──────────────────────── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-    /* ── RESPONSIVE ──────────────────────── */
-    @media (max-width: 900px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-links { gap: 1.5rem; }
-      .hero { grid-template-columns: 1fr; }
-      .hero-left { padding: 4rem 1.75rem 3rem; }
-      .hero-right { padding: 3rem 1.75rem; min-height: 200px; }
-      .story-section { grid-template-columns: 1fr; }
-      .story-sidebar { position: static; padding: 2.5rem 1.75rem; }
-      .story-main { padding: 3rem 1.75rem; }
-      .edu-grid { grid-template-columns: 1fr; }
-      .pillars { grid-template-columns: 1fr; }
-      .industry-item { grid-template-columns: 1fr; gap: 0.4rem; }
-      .bottom-cta { grid-template-columns: 1fr; padding: 3rem 1.75rem; }
-      footer { flex-direction: column; gap: 1.5rem; padding: 2rem; text-align: center; }
+    @media(max-width:800px){
+      .hero-inner { grid-template-columns:1fr; }
+      .hero-right { border-left:none; border-top:1px solid var(--border); }
+      .hero-left { padding:3rem 0 2rem; }
+      .content-grid { grid-template-columns:1fr; }
+      .sidebar { position:static; border-right:none; border-bottom:1px solid var(--border); padding:1.5rem 0; }
+      .block { padding:2.5rem 0; }
+      .edu-grid,.pillars { grid-template-columns:1fr; }
+      .cta { grid-template-columns:1fr; }
+      .footer { flex-direction:column; gap:1rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="index.html" class="nav-name">Nevin Kohler</a>
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">Nevin Kohler</a>
+    <div class="nav-sep"></div>
     <ul class="nav-links">
-      <li><a href="index.html#about">About</a></li>
+      <li><a href="about.html" class="active">About</a></li>
       <li><a href="index.html#portfolio">Portfolio</a></li>
       <li><a href="index.html#contact">Contact</a></li>
     </ul>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-left">
-      <p class="hero-eyebrow">About</p>
-      <h1 class="hero-headline">
-        Making sense of data<br/>so <em>AI can too.</em>
-      </h1>
-      <p class="hero-intro">
-        I'm a knowledge engineer and ontologist with over ten years spent building the semantic infrastructure that helps organizations understand their own data — and now, that helps AI systems understand it too.
-      </p>
-    </div>
-    <div class="hero-right">
-      <div class="hero-photo-wrap">
-        <img src="nevin_pic.jpg" alt="Nevin Kohler"/>
-      </div>
-      <ul class="hero-detail-list">
-        <li class="hero-detail-item">
-          <span class="detail-key">Based</span>
-          <span class="detail-val">San Antonio, TX — remote</span>
-        </li>
-        <li class="hero-detail-item">
-          <span class="detail-key">Focus</span>
-          <span class="detail-val">AI knowledge systems, ontology, metadata governance</span>
-        </li>
-        <li class="hero-detail-item">
-          <span class="detail-key">Industries</span>
-          <span class="detail-val">Finance, federal government, aerospace, tech</span>
-        </li>
-        <li class="hero-detail-item">
-          <span class="detail-key">Education</span>
-          <span class="detail-val">MLIS, University of Arizona &nbsp;·&nbsp; MS Climate Science, NAU</span>
-        </li>
-        <li class="hero-detail-item">
-          <span class="detail-key">Available</span>
-          <span class="detail-val">Consulting &amp; full-time roles</span>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- STORY -->
-  <div class="story-section">
-
-    <aside class="story-sidebar">
-      <p class="sidebar-label">On this page</p>
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-item"><a href="#background">The background</a></li>
-        <li class="sidebar-nav-item"><a href="#education">Two masters degrees</a></li>
-        <li class="sidebar-nav-item"><a href="#industries">Industries &amp; employers</a></li>
-        <li class="sidebar-nav-item"><a href="#consulting">Going independent</a></li>
-        <li class="sidebar-nav-item"><a href="#philosophy">How I work</a></li>
-      </ul>
-    </aside>
-
-    <main class="story-main">
-
-      <!-- Background -->
-      <section class="story-block fade-in" id="background">
-        <p class="block-label">The Background</p>
-        <h2 class="block-headline">I've spent a decade making sure<br/><em>knowledge doesn't get lost.</em></h2>
-        <div class="prose">
-          <p>My career started in libraries and archives — places where organizing, describing, and making knowledge findable is the whole job. What I learned there was that the hard problem isn't storing information; it's giving it enough structure that other people (and now, other systems) can reliably understand and use it.</p>
-          <p>That thread runs through everything I've done since: building taxonomies at Cisco to govern metadata across enterprise content systems, designing ontologies at Boeing for aerospace knowledge management, and developing the semantic infrastructure at the International Monetary Fund that connected structured financial data across global teams.</p>
-          <p>The work has always been the same at its core — take complex domain knowledge that lives informally in people's heads or inconsistently across systems, and give it the formal structure it needs to be governed, reused, and trusted.</p>
-        </div>
-        <div class="pull-quote">
-          "The hard problem isn't storing information — it's giving it enough structure that other systems can reliably understand and use it."
-        </div>
-        <div class="prose">
-          <p>What's changed recently is that the stakes of doing this well have gone up considerably. AI agents operating in finance, healthcare, and regulated industries are only as reliable as the domain knowledge underneath them. The field now has a name for what I've been doing — AI grounding — and a genuine shortage of people who know how to do it properly.</p>
-        </div>
-      </section>
-
-      <!-- Education -->
-      <section class="story-block fade-in" id="education">
-        <p class="block-label">Education</p>
-        <h2 class="block-headline">Two graduate degrees.<br/>One in information. One in <em>climate.</em></h2>
-        <div class="prose">
-          <p>My Master's in Library and Information Science from the University of Arizona gave me the foundational framework: information architecture, metadata standards, controlled vocabularies, and the theory behind how knowledge gets organized and retrieved. It's still the core of everything I do technically.</p>
-          <p>The second degree — a Master's in Climate Science and Solutions from Northern Arizona University — is a different story. It came from genuine curiosity about environmental data and modeling, and it sharpened something the first degree didn't: how to work with complex, uncertain, multidisciplinary knowledge and still produce something actionable. Climate science is a domain where the stakes of imprecise terminology and inconsistent data are unusually high. That experience informs how I think about semantic precision.</p>
-          <p>Together they make for an unusual combination — rigorous information science training alongside real scientific domain experience — that turns out to be well-suited to building knowledge systems for complex, regulated domains.</p>
-        </div>
-        <div class="edu-grid">
-          <div class="edu-card">
-            <p class="edu-degree">Master of Arts, Library &amp; Information Science</p>
-            <p class="edu-school">University of Arizona</p>
-            <p class="edu-note">Metadata standards, controlled vocabularies, information architecture, knowledge organization</p>
-          </div>
-          <div class="edu-card">
-            <p class="edu-degree">Master of Science, Climate Science &amp; Solutions</p>
-            <p class="edu-school">Northern Arizona University</p>
-            <p class="edu-note">Complex domain modeling, scientific data management, multidisciplinary knowledge systems</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Industries -->
-      <section class="story-block fade-in" id="industries">
-        <p class="block-label">Industries &amp; Employers</p>
-        <h2 class="block-headline">Fortune 500s, federal agencies,<br/><em>and everyone in between.</em></h2>
-        <div class="prose">
-          <p>One thing the breadth of my background gives me is genuine cross-domain fluency. The semantic problems at a global technology company are structurally similar to those at a federal financial institution — different vocabularies, same underlying need for governed, interoperable knowledge. Having worked in both means I don't have to learn from scratch how large organizations actually function when I walk into a new engagement.</p>
-        </div>
-        <div class="industry-list">
-          <div class="industry-item">
-            <span class="industry-org">Cisco Systems</span>
-            <div class="industry-detail">
-              <p class="industry-role">Metadata Analyst</p>
-              <p class="industry-desc">Enterprise taxonomy governance, Progress Semaphore, metadata standards for content at Fortune 500 scale</p>
-            </div>
-          </div>
-          <div class="industry-item">
-            <span class="industry-org">International Monetary Fund</span>
-            <div class="industry-detail">
-              <p class="industry-role">IT Metadata Specialist / Taxonomist</p>
-              <p class="industry-desc">Federal-scale ontology design, SharePoint Term Store governance, multilingual taxonomy management across global teams</p>
-            </div>
-          </div>
-          <div class="industry-item">
-            <span class="industry-org">The Boeing Company</span>
-            <div class="industry-detail">
-              <p class="industry-role">Information Science Specialist / Ontologist</p>
-              <p class="industry-desc">OWL ontology design for aerospace knowledge management, knowledge graph architecture, semantic interoperability</p>
-            </div>
-          </div>
-          <div class="industry-item">
-            <span class="industry-org">Naval Postgraduate School</span>
-            <div class="industry-detail">
-              <p class="industry-role">Catalog &amp; Metadata Librarian</p>
-              <p class="industry-desc">Bibliographic metadata, cataloging standards, academic knowledge systems for defense research institution</p>
-            </div>
-          </div>
-          <div class="industry-item">
-            <span class="industry-org">AECOM / Oak Ridge National Lab</span>
-            <div class="industry-detail">
-              <p class="industry-role">Earlier Roles</p>
-              <p class="industry-desc">Corporate knowledge repositories, scientific data processing, metadata systems for engineering and research organizations</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Consulting pivot -->
-      <section class="story-block fade-in" id="consulting">
-        <p class="block-label">Going Independent</p>
-        <h2 class="block-headline">The job market is slow.<br/>The <em>need</em> for this work isn't.</h2>
-        <div class="prose">
-          <p>I'm currently available for both consulting engagements and full-time roles. The consulting path grew from a practical observation: the teams building AI products in regulated industries right now are moving fast, but very few of them have anyone on staff who understands formal knowledge representation. They're building on informal, inconsistent domain knowledge and wondering why their agents keep getting things wrong.</p>
-          <p>My approach is to embed with AI or data teams — usually for a defined engagement — and build the knowledge layer they're missing: a governed taxonomy, a formal ontology, a grounding data model. Something that persists and improves over time, rather than being rebuilt from scratch every time a new model is deployed.</p>
-          <p>If a full-time role is the right fit, I'm open to that too. What I'm looking for is work where the semantic layer is taken seriously — not treated as documentation overhead, but as core infrastructure for reliable AI.</p>
-        </div>
-      </section>
-
-      <!-- Philosophy -->
-      <section class="story-block fade-in" id="philosophy">
-        <p class="block-label">How I Work</p>
-        <h2 class="block-headline">Principles that shape<br/>every <em>engagement.</em></h2>
-        <div class="prose" style="margin-bottom:1.75rem;">
-          <p>After ten years of this work across very different organizations, a few things have become consistent about how I approach it.</p>
-        </div>
-        <div class="pillars">
-          <div class="pillar">
-            <h3 class="pillar-title">Governance is not an afterthought</h3>
-            <p class="pillar-body">A taxonomy or ontology without stewardship, lifecycle states, and change management isn't an asset — it's technical debt. I build governance in from the start, not as a box to check at the end.</p>
-          </div>
-          <div class="pillar">
-            <h3 class="pillar-title">Standards exist for good reasons</h3>
-            <p class="pillar-body">SKOS, OWL, FIBO, HL7 — these aren't bureaucratic constraints. They're accumulated wisdom about how to make knowledge interoperable across systems and organizations. I use them because they work.</p>
-          </div>
-          <div class="pillar">
-            <h3 class="pillar-title">Precision serves everyone</h3>
-            <p class="pillar-body">Vague definitions feel inclusive but create downstream failures. I push for semantic precision — clear scope notes, explicit usage constraints, defined boundaries — because ambiguity in a knowledge model becomes hallucination in an AI system.</p>
-          </div>
-          <div class="pillar">
-            <h3 class="pillar-title">Business and technical must connect</h3>
-            <p class="pillar-body">The most common failure mode is a semantically correct artifact that nobody in the business understands or uses. I spend as much time on stakeholder alignment and plain-language documentation as on the formal modeling itself.</p>
-          </div>
-        </div>
-      </section>
-
-    </main>
   </div>
+  <div class="nav-right">
+    <span class="badge">Available for work</span>
+    <a href="/cdn-cgi/l/email-protection#afc1cad9c6c1efc1cad9c6c1c4c0c7c3cadd81ccc0c2" class="btn-nav">Get in touch</a>
+  </div>
+</nav>
 
-  <!-- BOTTOM CTA -->
-  <section class="bottom-cta">
-    <div>
-      <h2 class="bottom-cta-headline">
-        Let's talk about<br/>what you're <em>building.</em>
-      </h2>
-      <p class="bottom-cta-body">Consulting engagements and full-time roles — remote, in regulated industries preferred.</p>
+<!-- HERO -->
+<div style="background:var(--bg-0);">
+  <div class="page">
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <p class="hero-label">About</p>
+          <h1 class="hero-h1">Nevin Kohler<br/><span class="muted">Knowledge Engineer</span></h1>
+          <p class="hero-p">Ten years building the semantic infrastructure that helps organizations — and now AI systems — understand their own data.</p>
+        </div>
+        <div class="hero-right">
+          <div class="hero-photo-wrap">
+            <img src="nevin_pic.jpg" alt="Nevin Kohler" class="hero-photo"/>
+          </div>
+          <div class="hero-specs">
+            <div class="spec-row"><span class="spec-k">Location</span><span class="spec-v">San Antonio, TX — remote</span></div>
+            <div class="spec-row"><span class="spec-k">Focus</span><span class="spec-v">AI knowledge systems · ontology · metadata governance</span></div>
+            <div class="spec-row"><span class="spec-k">Industries</span><span class="spec-v">Finance · Federal · Aerospace · Enterprise Tech</span></div>
+            <div class="spec-row"><span class="spec-k">Available</span><span class="spec-v">Consulting &amp; full-time roles</span></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="btn-group">
-      <a href="mailto:nevin@example.com" class="btn btn-primary">Get in Touch</a>
-      <a href="keybank-portfolio.html" class="btn btn-ghost-light">See the Work →</a>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div style="background:var(--bg-0);">
+  <div class="page">
+    <div class="content-grid">
+
+      <aside class="sidebar">
+        <p class="sidebar-label">Contents</p>
+        <ul class="sidebar-nav">
+          <li><a href="#background">Background</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#industries">Industries</a></li>
+          <li><a href="#consulting">Going independent</a></li>
+          <li><a href="#philosophy">How I work</a></li>
+        </ul>
+      </aside>
+
+      <div class="main-col">
+
+        <div class="block fi" id="background">
+          <p class="block-label">Background</p>
+          <h2 class="block-h">A decade making sure<br/><span class="muted">knowledge doesn't get lost.</span></h2>
+          <div class="prose">
+            <p>My career started in libraries and archives — places where organizing, describing, and making knowledge findable is the whole job. What I learned there was that the hard problem isn't storing information; it's giving it enough structure that other people — and now, other systems — can reliably understand and use it.</p>
+            <p>That thread runs through everything I've done since: building taxonomies at Cisco to govern metadata across enterprise content systems, designing ontologies at Boeing for aerospace knowledge management, and developing the semantic infrastructure at the International Monetary Fund that connected structured financial data across global teams.</p>
+            <p>The work has always been the same at its core — take complex domain knowledge that lives informally in people's heads or inconsistently across systems, and give it the <span class="hl">formal structure it needs to be governed, reused, and trusted.</span></p>
+          </div>
+          <div class="pull">
+            <p class="pull-text">The field now has a name for what I've been doing — AI grounding — and a genuine shortage of people who know how to do it properly.</p>
+          </div>
+          <div class="prose">
+            <p>What's changed is that the stakes of doing this well have gone up considerably. AI agents operating in finance, healthcare, and regulated industries are only as reliable as the domain knowledge underneath them.</p>
+          </div>
+        </div>
+
+        <div class="block fi" id="education">
+          <p class="block-label">Education</p>
+          <h2 class="block-h">Two graduate degrees.<br/><span class="muted">One in information. One in climate.</span></h2>
+          <div class="prose">
+            <p>My MLIS from the University of Arizona gave me the foundational framework: information architecture, metadata standards, controlled vocabularies, and the theory behind how knowledge gets organized and retrieved.</p>
+            <p>The second — MS in Climate Science from Northern Arizona University — sharpened something the first didn't: how to work with complex, uncertain, multidisciplinary knowledge and still produce something actionable. Climate science is a domain where the stakes of imprecise terminology are unusually high. That informs how I think about semantic precision in any domain.</p>
+          </div>
+          <div class="edu-grid">
+            <div class="edu-card">
+              <p class="edu-deg">MA, Library &amp; Information Science</p>
+              <p class="edu-school">University of Arizona</p>
+              <p class="edu-note">Metadata standards · controlled vocabularies · information architecture · knowledge organization</p>
+            </div>
+            <div class="edu-card">
+              <p class="edu-deg">MS, Climate Science &amp; Solutions</p>
+              <p class="edu-school">Northern Arizona University</p>
+              <p class="edu-note">Complex domain modeling · scientific data management · multidisciplinary knowledge systems</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="block fi" id="industries">
+          <p class="block-label">Industries &amp; Employers</p>
+          <h2 class="block-h">Fortune 500s, federal agencies,<br/><span class="muted">and everyone in between.</span></h2>
+          <div class="prose">
+            <p>The semantic problems at a global technology company are structurally similar to those at a federal financial institution — different vocabularies, same underlying need for governed, interoperable knowledge. Having worked in both means I don't have to learn how large organizations function from scratch.</p>
+          </div>
+          <table class="exp-table">
+            <tr><td class="td-org">Cisco Systems</td><td class="td-role">Metadata Analyst</td><td class="td-detail">Enterprise taxonomy governance, Progress Semaphore, metadata standards at Fortune 500 scale</td></tr>
+            <tr><td class="td-org">Int'l Monetary Fund</td><td class="td-role">IT Metadata Specialist / Taxonomist</td><td class="td-detail">Federal-scale ontology design, SharePoint governance, multilingual taxonomy across global teams</td></tr>
+            <tr><td class="td-org">The Boeing Company</td><td class="td-role">Info Science Specialist / Ontologist</td><td class="td-detail">OWL ontology, aerospace knowledge management, semantic interoperability</td></tr>
+            <tr><td class="td-org">Naval Postgraduate School</td><td class="td-role">Catalog &amp; Metadata Librarian</td><td class="td-detail">Bibliographic metadata, cataloging standards, defense research knowledge systems</td></tr>
+            <tr><td class="td-org">AECOM / Oak Ridge Nat'l Lab</td><td class="td-role">Earlier Roles</td><td class="td-detail">Corporate knowledge repositories, scientific data, metadata for engineering and research orgs</td></tr>
+          </table>
+        </div>
+
+        <div class="block fi" id="consulting">
+          <p class="block-label">Going Independent</p>
+          <h2 class="block-h">The job market is slow.<br/><span class="muted">The need for this work isn't.</span></h2>
+          <div class="prose">
+            <p>I'm currently available for both consulting engagements and full-time roles. The consulting path grew from a practical observation: the teams building AI products in regulated industries are moving fast, but very few have anyone on staff who understands formal knowledge representation.</p>
+            <p>My approach is to embed with AI or data teams — usually for a defined engagement — and build the knowledge layer they're missing: a governed taxonomy, a formal ontology, a grounding data model. Something that persists and improves over time rather than being rebuilt from scratch with each new model deployment.</p>
+            <p>What I'm looking for is work where the <span class="hl">semantic layer is taken seriously</span> — not treated as documentation overhead, but as core infrastructure for reliable AI.</p>
+          </div>
+        </div>
+
+        <div class="block fi" id="philosophy">
+          <p class="block-label">How I Work</p>
+          <h2 class="block-h">Principles behind<br/><span class="muted">every engagement.</span></h2>
+          <div class="pillars">
+            <div class="pillar"><div class="pillar-idx">01 /</div><div class="pillar-title">Governance is not an afterthought</div><p class="pillar-body">A taxonomy without stewardship, lifecycle states, and change management isn't an asset — it's technical debt. I build governance in from the start.</p></div>
+            <div class="pillar"><div class="pillar-idx">02 /</div><div class="pillar-title">Standards exist for good reasons</div><p class="pillar-body">SKOS, OWL, FIBO, HL7 — accumulated wisdom about how to make knowledge interoperable across systems. I use them because they work.</p></div>
+            <div class="pillar"><div class="pillar-idx">03 /</div><div class="pillar-title">Precision serves everyone</div><p class="pillar-body">Ambiguity in a knowledge model becomes hallucination in an AI system. I push for explicit scope notes, clear boundaries, and defined usage constraints.</p></div>
+            <div class="pillar"><div class="pillar-idx">04 /</div><div class="pillar-title">Business and technical must connect</div><p class="pillar-body">A semantically correct artifact nobody uses is a failure. I spend as much time on stakeholder alignment as on formal modeling.</p></div>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- FOOTER -->
-  <footer>
-    <p class="footer-name">Nevin Kohler &nbsp;·&nbsp; AI Knowledge Systems</p>
-    <div class="footer-links">
-      <a href="#">LinkedIn</a>
-      <a href="#">GitHub</a>
-      <a href="index.html#contact">Contact</a>
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="page">
+    <div class="cta fi">
+      <div>
+        <h2 class="cta-h">Let's talk about what you're building.</h2>
+        <p class="cta-p">Consulting engagements and full-time roles — remote, regulated industries preferred.</p>
+      </div>
+      <div class="cta-btns">
+        <a href="/cdn-cgi/l/email-protection#08666d7e616648666d7e6166636760646d7a266b6765" class="btn btn-white">Get in touch →</a>
+        <a href="keybank-portfolio.html" class="btn btn-outline">See the work ↗</a>
+      </div>
     </div>
-  </footer>
+  </div>
+</div>
 
-  <script>
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(el => {
-        if (el.isIntersecting) { el.target.classList.add('visible'); observer.unobserve(el.target); }
-      });
-    }, { threshold: 0.08 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-  </script>
+<div class="footer-wrap">
+  <div class="page">
+    <div class="footer">
+      <span class="footer-l">© 2026 Nevin Kohler · nevinkohler.com</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/nevinkohler/">LinkedIn</a><a href="https://github.com/nevin7">GitHub</a><a href="index.html#contact">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
 
-</body>
-</html>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const obs = new IntersectionObserver(es => es.forEach(e =

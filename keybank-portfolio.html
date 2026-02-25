@@ -3,963 +3,418 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Banking Domain Semantic Layer — Nevin Kohler</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <title>Financial Domain Semantic Layer — Nevin Kohler</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
     :root {
-      --ink: #1a1714;
-      --warm-mid: #4a4340;
-      --warm-light: #8c7e78;
-      --cream: #f5f0ea;
-      --parchment: #ede6db;
-      --amber: #c17f3b;
-      --amber-light: #d9a05a;
-      --rule: #d4c9bc;
-      --white: #fdfaf6;
-      --code-bg: #1e1c1a;
-      --code-text: #d4c9bc;
-      --code-accent: #d9a05a;
-      --code-green: #8bba8b;
-      --code-blue: #88b4cc;
-      --code-comment: #5a524e;
-    }
-
-    html { font-size: 16px; scroll-behavior: smooth; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--white);
-      color: var(--ink);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    /* ── NAV ─────────────────────────────── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 1.25rem 3rem;
-      display: flex; justify-content: space-between; align-items: center;
-      background: rgba(253,250,246,0.92);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--rule);
-    }
-    .nav-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem; font-weight: 400;
-      letter-spacing: 0.04em; color: var(--ink); text-decoration: none;
-    }
-    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-    .nav-links a {
-      font-size: 0.8rem; font-weight: 500; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--warm-mid); text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover, .nav-links a.active { color: var(--amber); }
-
-    /* ── HERO ────────────────────────────── */
-    .hero {
-      padding-top: 70px;
-      background: var(--ink);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute; top: 0; right: 0;
-      width: 50%; height: 100%;
-      background: linear-gradient(135deg, transparent 40%, rgba(193,127,59,0.04) 100%);
-      pointer-events: none;
-    }
-
-    /* Subtle grid texture */
-    .hero::after {
-      content: '';
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(193,127,59,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(193,127,59,0.04) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      position: relative; z-index: 2;
-      max-width: 1100px; margin: 0 auto;
-      padding: 5rem 5rem 4rem;
-    }
-
-    .breadcrumb {
-      display: flex; align-items: center; gap: 0.75rem;
-      font-size: 0.75rem; font-weight: 400; letter-spacing: 0.08em;
-      color: #5a524e; text-transform: uppercase;
-      margin-bottom: 2.5rem;
-      opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
-    }
-    .breadcrumb a { color: var(--amber); text-decoration: none; }
-    .breadcrumb a:hover { color: var(--amber-light); }
-    .breadcrumb-sep { color: #3a3330; }
-
-    .hero-eyebrow {
-      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--amber);
-      margin-bottom: 1rem;
-      opacity: 0; animation: fadeUp 0.6s 0.2s forwards;
-    }
-
-    .hero-headline {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.5rem, 5vw, 4.2rem);
-      font-weight: 300; line-height: 1.1; color: var(--cream);
-      margin-bottom: 1.5rem;
-      opacity: 0; animation: fadeUp 0.7s 0.3s forwards;
-    }
-    .hero-headline em { font-style: italic; color: var(--amber-light); }
-
-    .hero-sub {
-      font-size: 1rem; font-weight: 300; color: #8c7e78;
-      max-width: 620px; line-height: 1.8; margin-bottom: 3rem;
-      opacity: 0; animation: fadeUp 0.7s 0.45s forwards;
-    }
-
-    .hero-stats {
-      display: flex; gap: 3rem; flex-wrap: wrap;
-      padding-top: 2.5rem;
-      border-top: 1px solid #2a2724;
-      opacity: 0; animation: fadeUp 0.7s 0.55s forwards;
-    }
-
-    .stat { }
-    .stat-number {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2.5rem; font-weight: 300; color: var(--amber-light);
-      line-height: 1; margin-bottom: 0.3rem;
-    }
-    .stat-label {
-      font-size: 0.72rem; font-weight: 400; letter-spacing: 0.1em;
-      text-transform: uppercase; color: #5a524e;
-    }
-
-    /* ── OVERVIEW STRIP ──────────────────── */
-    .overview-strip {
-      background: var(--amber);
-      padding: 1.5rem 5rem;
-      display: flex; align-items: center; gap: 3rem; flex-wrap: wrap;
-    }
-    .strip-label {
-      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.15em;
-      text-transform: uppercase; color: rgba(255,255,255,0.7);
-      white-space: nowrap;
-    }
-    .strip-tags { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .strip-tag {
-      font-size: 0.78rem; font-weight: 400;
-      background: rgba(255,255,255,0.2);
-      color: #fff; padding: 0.3rem 0.85rem; border-radius: 2px;
-    }
-
-    /* ── LAYOUT ──────────────────────────── */
-    .content-wrap {
-      max-width: 1100px; margin: 0 auto;
-      padding: 0 5rem;
-    }
-
-    /* ── CONTEXT SECTION ─────────────────── */
-    .context-section {
-      padding: 5rem 0 4rem;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
-      align-items: start;
-    }
-
-    .section-label {
-      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--amber); font-weight: 500; margin-bottom: 1rem;
-    }
-
-    .section-headline {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.8rem, 2.5vw, 2.4rem);
-      font-weight: 300; line-height: 1.2; color: var(--ink);
-      margin-bottom: 1.5rem;
-    }
-
-    .prose {
-      font-size: 0.92rem; font-weight: 300; color: var(--warm-mid);
-      line-height: 1.85;
-    }
-    .prose p { margin-bottom: 1.25rem; }
-    .prose p:last-child { margin-bottom: 0; }
-
-    .context-aside {
-      background: var(--cream);
-      padding: 2.5rem;
-      border-left: 3px solid var(--amber);
-    }
-
-    .aside-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem; font-weight: 400; color: var(--ink);
-      margin-bottom: 1.25rem;
-    }
-
-    .aside-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
-    .aside-item { display: flex; gap: 0.75rem; align-items: flex-start; }
-    .aside-dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--amber); margin-top: 0.55rem; flex-shrink: 0;
-    }
-    .aside-text { font-size: 0.85rem; font-weight: 300; color: var(--warm-mid); line-height: 1.65; }
-    .aside-text strong { color: var(--ink); font-weight: 500; }
-
-    /* ── DIVIDER ─────────────────────────── */
-    .section-divider {
-      height: 1px; background: var(--rule); margin: 0;
-    }
-
-    /* ── ARTIFACT SECTIONS ───────────────── */
-    .artifact-section {
-      padding: 5rem 0;
-    }
-
-    .artifact-header {
-      display: grid; grid-template-columns: auto 1fr; gap: 2rem;
-      align-items: start; margin-bottom: 3rem;
-    }
-
-    .artifact-number {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 5rem; font-weight: 300; line-height: 1;
-      color: var(--rule); user-select: none;
-    }
-
-    .artifact-meta { padding-top: 0.5rem; }
-    .artifact-label {
-      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--amber); font-weight: 500; margin-bottom: 0.5rem;
-    }
-    .artifact-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-      font-weight: 400; color: var(--ink); line-height: 1.15;
-      margin-bottom: 0.6rem;
-    }
-    .artifact-file {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem; color: var(--warm-light); letter-spacing: 0.05em;
-    }
-
-    /* Taxonomy two-col layout */
-    .artifact-body-two-col {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;
-    }
-
-    /* Domain grid */
-    .domain-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 1.5rem;
-    }
-
-    .domain-card {
-      background: var(--cream); padding: 1.25rem 1.5rem;
-      transition: background 0.2s;
-    }
-    .domain-card:hover { background: var(--parchment); }
-
-    .domain-name {
-      font-size: 0.82rem; font-weight: 500; color: var(--ink);
-      margin-bottom: 0.25rem;
-    }
-    .domain-count {
-      font-size: 0.75rem; font-weight: 300; color: var(--warm-light);
-    }
-
-    /* Metadata column showcase */
-    .meta-columns-showcase {
-      background: var(--code-bg);
-      padding: 1.75rem;
-      margin-top: 1.5rem;
-    }
-
-    .meta-col-label {
-      font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--code-comment); margin-bottom: 1rem;
-      font-family: 'DM Mono', monospace;
-    }
-
-    .meta-cols {
-      display: flex; flex-direction: column; gap: 0.5rem;
-    }
-
-    .meta-col-row {
-      display: flex; gap: 1rem; align-items: baseline;
-    }
-
-    .meta-col-name {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.78rem; color: var(--code-accent); white-space: nowrap;
-      min-width: 180px;
-    }
-
-    .meta-col-desc {
-      font-size: 0.78rem; font-weight: 300; color: var(--code-comment);
-    }
-
-    /* Code block */
-    .code-block {
-      background: var(--code-bg);
-      padding: 2rem;
-      overflow-x: auto;
-      position: relative;
-      margin-top: 2rem;
-    }
-
-    .code-filename {
-      position: absolute; top: 0; right: 0;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.68rem; color: var(--code-comment);
-      letter-spacing: 0.08em; text-transform: uppercase;
-      padding: 0.5rem 0.85rem;
-      background: rgba(255,255,255,0.04);
-      border-bottom-left-radius: 2px;
-    }
-
-    pre {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.8rem; line-height: 1.7;
-      color: var(--code-text);
-      white-space: pre;
-    }
-
-    .kw { color: var(--code-accent); }          /* keywords, prefixes */
-    .cls { color: var(--code-blue); }           /* class names */
-    .str { color: var(--code-green); }          /* strings, literals */
-    .cm { color: var(--code-comment); }         /* comments */
-    .prop { color: #c8a9d9; }                   /* properties */
-
-    /* Ontology stats bar */
-    .onto-stats {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
-      margin-bottom: 2.5rem;
-    }
-
-    .onto-stat {
-      background: var(--parchment); padding: 1.5rem;
-      text-align: center;
-    }
-
-    .onto-stat-n {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2.2rem; font-weight: 300; color: var(--amber);
-      line-height: 1; margin-bottom: 0.35rem;
-    }
-    .onto-stat-l {
-      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
-      font-weight: 400; color: var(--warm-light);
-    }
-
-    /* KG scenario */
-    .scenario-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
-      margin-bottom: 2.5rem;
-    }
-
-    .scenario-card {
-      background: var(--code-bg); padding: 1.5rem;
-      border-top: 2px solid transparent;
-      transition: border-color 0.2s;
-    }
-    .scenario-card:hover { border-top-color: var(--amber); }
-
-    .scenario-card-type {
-      font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--code-comment); font-family: 'DM Mono', monospace;
-      margin-bottom: 0.6rem;
-    }
-    .scenario-card-name {
-      font-size: 0.92rem; font-weight: 500; color: var(--cream);
-      margin-bottom: 0.4rem;
-    }
-    .scenario-card-desc {
-      font-size: 0.78rem; font-weight: 300; color: #6b5f57; line-height: 1.6;
-    }
-
-    /* Query cards */
-    .query-grid {
-      display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem;
-    }
-
-    .query-card {
-      background: var(--code-bg); padding: 0;
-      overflow: hidden;
-    }
-
-    .query-header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0.85rem 1.25rem;
-      background: rgba(255,255,255,0.03);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      cursor: pointer;
-    }
-
-    .query-title {
-      font-size: 0.82rem; font-weight: 400; color: var(--cream);
-    }
-
-    .query-toggle {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem; color: var(--amber);
-    }
-
-    .query-body {
-      padding: 1.25rem;
-      display: none;
-    }
-    .query-body.open { display: block; }
-
-    /* ── TAKEAWAYS ───────────────────────── */
-    .takeaways-section {
-      background: var(--cream);
-      padding: 5rem;
-    }
-
-    .takeaways-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 3rem;
-    }
-
-    .takeaway-card {
-      padding: 2rem 0;
-      border-top: 2px solid var(--rule);
-      transition: border-top-color 0.2s;
-    }
-    .takeaway-card:hover { border-top-color: var(--amber); }
-
-    .takeaway-card h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem; font-weight: 400; color: var(--ink);
-      margin-bottom: 0.75rem;
-    }
-    .takeaway-card p {
-      font-size: 0.85rem; font-weight: 300; color: var(--warm-mid);
-      line-height: 1.75;
-    }
-
-    /* ── NEXT PROJECT / CTA ──────────────── */
-    .bottom-cta {
-      background: var(--ink); padding: 5rem;
-      display: grid; grid-template-columns: 1fr auto; gap: 3rem;
-      align-items: center;
-    }
-
-    .bottom-cta-headline {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.8rem, 3vw, 2.8rem);
-      font-weight: 300; color: var(--cream); line-height: 1.2;
-    }
-    .bottom-cta-headline em { font-style: italic; color: var(--amber-light); }
-
-    .bottom-cta-body {
-      font-size: 0.88rem; font-weight: 300; color: #6b5f57;
-      margin-top: 0.75rem; line-height: 1.75;
-    }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.85rem 2rem; font-family: 'DM Sans', sans-serif;
-      font-size: 0.82rem; font-weight: 500; letter-spacing: 0.06em;
-      text-transform: uppercase; text-decoration: none;
-      border-radius: 2px; transition: all 0.25s; cursor: pointer;
-      white-space: nowrap;
-    }
-    .btn-primary { background: var(--amber); color: var(--white); border: 1.5px solid var(--amber); }
-    .btn-primary:hover { background: #a86e2e; border-color: #a86e2e; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(193,127,59,0.25); }
-    .btn-ghost-light { background: transparent; color: #8c7e78; border: 1.5px solid #3a3330; }
-    .btn-ghost-light:hover { border-color: #6b5f57; color: var(--cream); transform: translateY(-1px); }
-
-    .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
-
-    /* ── FOOTER ──────────────────────────── */
-    footer {
-      background: #111009; padding: 2rem 5rem;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .footer-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem; font-weight: 300; color: #3a3330; letter-spacing: 0.05em;
-    }
-    .footer-links { display: flex; gap: 2rem; }
-    .footer-links a {
-      font-size: 0.75rem; color: #3a3330; text-decoration: none;
-      letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s;
-    }
-    .footer-links a:hover { color: var(--amber-light); }
-
-    /* ── ANIMATIONS ──────────────────────── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-    /* ── RESPONSIVE ──────────────────────── */
-    @media (max-width: 900px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-links { gap: 1.5rem; }
-      .hero-inner, .content-wrap { padding-left: 1.75rem; padding-right: 1.75rem; }
-      .overview-strip { padding: 1.25rem 1.75rem; }
-      .context-section { grid-template-columns: 1fr; gap: 2rem; }
-      .artifact-body-two-col { grid-template-columns: 1fr; }
-      .domain-grid { grid-template-columns: 1fr 1fr; }
-      .onto-stats { grid-template-columns: 1fr 1fr; }
-      .scenario-grid { grid-template-columns: 1fr; }
-      .takeaways-section { padding: 3rem 1.75rem; }
-      .takeaways-grid { grid-template-columns: 1fr; }
-      .bottom-cta { grid-template-columns: 1fr; padding: 3rem 1.75rem; }
-      footer { flex-direction: column; gap: 1.5rem; padding: 2rem; text-align: center; }
-      .hero-stats { gap: 2rem; }
+      --bg-0:#0a0a0a; --bg-1:#111111; --bg-2:#1a1a1a; --bg-3:#222222;
+      --border:#222222; --border-hi:#333333;
+      --t1:#eeeeee; --t2:#888888; --t3:#444444;
+      --blue:#3b82f6; --blue-bg:rgba(59,130,246,0.08); --blue-border:rgba(59,130,246,0.2);
+      --green:#22c55e; --green-bg:rgba(34,197,94,0.08); --green-border:rgba(34,197,94,0.2);
+      --amber:#f59e0b; --red:#ef4444; --cyan:#06b6d4;
+    }
+    html { font-size:16px; scroll-behavior:smooth; }
+    body { font-family:'Inter',sans-serif; background:var(--bg-0); color:var(--t2); line-height:1.6; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; height:52px; display:flex; align-items:center; justify-content:space-between; padding:0 1.5rem; background:rgba(10,10,10,0.85); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+    .nav-left { display:flex; align-items:center; gap:1.5rem; }
+    .nav-logo { font-size:0.875rem; font-weight:600; color:var(--t1); text-decoration:none; letter-spacing:-0.02em; }
+    .nav-sep { width:1px; height:16px; background:var(--border); }
+    .nav-links { display:flex; list-style:none; }
+    .nav-links a { font-size:0.8125rem; color:var(--t3); text-decoration:none; padding:0.25rem 0.625rem; border-radius:5px; transition:color 0.1s,background 0.1s; }
+    .nav-links a:hover,.nav-links a.active { color:var(--t1); background:var(--bg-2); }
+    .nav-right { display:flex; align-items:center; gap:0.75rem; }
+    .badge { font-size:0.6875rem; font-weight:500; color:var(--green); background:var(--green-bg); border:1px solid var(--green-border); padding:0.175rem 0.55rem; border-radius:99px; }
+    .btn-nav { font-size:0.8125rem; font-weight:500; color:#000; background:var(--t1); padding:0.375rem 0.875rem; border-radius:6px; text-decoration:none; transition:opacity 0.15s; }
+    .btn-nav:hover { opacity:0.85; }
+
+    .page { max-width:1100px; margin:0 auto; padding:0 1.5rem; }
+
+    /* HERO */
+    .hero { padding:100px 0 4rem; border-bottom:1px solid var(--border); }
+    .breadcrumb { display:flex; align-items:center; gap:0.5rem; font-size:0.75rem; color:var(--t3); margin-bottom:2rem; opacity:0; animation:up 0.4s 0.1s forwards; }
+    .breadcrumb a { color:var(--t3); text-decoration:none; transition:color 0.1s; }
+    .breadcrumb a:hover { color:var(--t1); }
+    .breadcrumb-sep { color:var(--border-hi); }
+    .hero-tag { display:inline-flex; align-items:center; font-size:0.6875rem; font-weight:500; color:var(--blue); background:var(--blue-bg); border:1px solid var(--blue-border); padding:0.175rem 0.55rem; border-radius:4px; margin-bottom:1rem; opacity:0; animation:up 0.4s 0.2s forwards; }
+    .hero-h1 { font-size:clamp(2rem,4.5vw,3.75rem); font-weight:600; letter-spacing:-0.04em; color:var(--t1); line-height:1.05; margin-bottom:1.25rem; max-width:720px; opacity:0; animation:up 0.5s 0.25s forwards; }
+    .hero-p { font-size:1rem; font-weight:300; color:var(--t2); line-height:1.8; max-width:580px; opacity:0; animation:up 0.5s 0.4s forwards; }
+
+    /* STATS + TECH */
+    .meta-row { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--bg-1); margin-bottom:1rem; }
+    .meta-cell { padding:1.25rem 1.375rem; border-right:1px solid var(--border); }
+    .meta-cell:last-child { border-right:none; }
+    .meta-n { font-size:1.875rem; font-weight:600; color:var(--t1); letter-spacing:-0.04em; line-height:1; margin-bottom:0.25rem; }
+    .meta-l { font-size:0.75rem; color:var(--t3); }
+    .tech-row { display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; padding:0.875rem 1.25rem; background:var(--bg-1); border:1px solid var(--border); border-radius:8px; }
+    .tech-label { font-size:0.6875rem; font-weight:500; color:var(--t3); letter-spacing:0.06em; text-transform:uppercase; margin-right:0.25rem; }
+    .tech-tag { font-family:'JetBrains Mono',monospace; font-size:0.6875rem; color:var(--t2); background:var(--bg-2); border:1px solid var(--border); padding:0.175rem 0.5rem; border-radius:4px; }
+
+    /* SECTIONS */
+    .section { padding:4rem 0; border-top:1px solid var(--border); }
+    .section-label { font-size:0.6875rem; font-weight:500; color:var(--t3); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem; }
+    .section-h { font-size:clamp(1.25rem,2.5vw,1.875rem); font-weight:600; letter-spacing:-0.03em; color:var(--t1); line-height:1.15; margin-bottom:0.75rem; }
+    .section-p { font-size:0.9rem; font-weight:300; color:var(--t2); line-height:1.75; max-width:560px; margin-bottom:2rem; }
+
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:start; }
+
+    /* ARTIFACT HEADER */
+    .artifact-num { font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--t3); margin-bottom:0.375rem; }
+    .artifact-title { font-size:1.25rem; font-weight:600; color:var(--t1); letter-spacing:-0.02em; margin-bottom:0.25rem; }
+    .artifact-file { font-family:'JetBrains Mono',monospace; font-size:0.725rem; color:var(--blue); margin-bottom:1.75rem; }
+
+    /* ONTO STATS */
+    .onto-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:2rem; }
+    .onto-stat { background:var(--bg-1); padding:1.125rem; text-align:center; }
+    .onto-n { font-size:1.75rem; font-weight:600; color:var(--t1); letter-spacing:-0.04em; line-height:1; margin-bottom:0.25rem; }
+    .onto-l { font-size:0.6875rem; color:var(--t3); }
+
+    /* DOMAIN GRID */
+    .domain-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:2rem; }
+    .domain-cell { background:var(--bg-1); padding:0.875rem 1rem; transition:background 0.1s; }
+    .domain-cell:hover { background:var(--bg-2); }
+    .domain-name { font-size:0.8125rem; font-weight:500; color:var(--t1); margin-bottom:0.2rem; }
+    .domain-desc { font-size:0.725rem; color:var(--t3); font-weight:300; }
+
+    /* META TABLE */
+    .meta-table-wrap { background:var(--bg-1); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+    .meta-table-head { padding:0.75rem 1.125rem; background:var(--bg-2); border-bottom:1px solid var(--border); font-size:0.6875rem; font-weight:500; color:var(--t3); letter-spacing:0.06em; text-transform:uppercase; }
+    .meta-table-row { display:grid; grid-template-columns:180px 1fr; gap:1rem; padding:0.6rem 1.125rem; border-bottom:1px solid var(--border); font-size:0.775rem; }
+    .meta-table-row:last-child { border-bottom:none; }
+    .mt-key { font-family:'JetBrains Mono',monospace; color:var(--blue); font-size:0.7rem; }
+    .mt-val { color:var(--t3); font-weight:300; }
+
+    /* LOG BLOCK */
+    .log-block { background:var(--bg-1); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+    .log-bar { display:flex; align-items:center; justify-content:space-between; padding:0.625rem 0.875rem; background:var(--bg-2); border-bottom:1px solid var(--border); }
+    .log-bar-title { font-family:'JetBrains Mono',monospace; font-size:0.6875rem; color:var(--t3); }
+    .log-lines { padding:1rem; font-family:'JetBrains Mono',monospace; font-size:0.725rem; line-height:1.9; }
+    .ll { display:grid; grid-template-columns:auto auto 1fr; gap:0.75rem; }
+    .ll-t { color:var(--t3); }
+    .ll-ok { color:var(--green); }
+    .ll-err { color:var(--red); }
+    .ll-m { color:var(--t2); }
+    .ll-m-err { color:rgba(239,68,68,0.75); }
+    .ll-cyan { color:var(--cyan); }
+
+    /* SCENARIO GRID */
+    .scenario-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:2rem; }
+    .scenario { background:var(--bg-1); padding:1.25rem; border-top:2px solid transparent; transition:border-top-color 0.15s,background 0.15s; }
+    .scenario:hover { border-top-color:var(--blue); background:var(--bg-2); }
+    .sc-type { font-size:0.6875rem; font-weight:500; color:var(--t3); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.375rem; }
+    .sc-name { font-size:0.9rem; font-weight:500; color:var(--t1); margin-bottom:0.35rem; }
+    .sc-desc { font-size:0.75rem; color:var(--t3); line-height:1.6; font-weight:300; }
+
+    /* QUERIES */
+    .queries { border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+    .q-row { border-bottom:1px solid var(--border); }
+    .q-row:last-child { border-bottom:none; }
+    .q-header { display:flex; justify-content:space-between; align-items:center; padding:0.875rem 1.125rem; cursor:pointer; transition:background 0.1s; background:var(--bg-1); }
+    .q-header:hover { background:var(--bg-2); }
+    .q-title { font-size:0.8125rem; font-weight:400; color:var(--t2); font-family:'JetBrains Mono',monospace; }
+    .q-toggle { font-size:0.75rem; color:var(--t3); }
+    .q-body { display:none; padding:1.125rem; background:var(--bg-0); border-top:1px solid var(--border); }
+    .q-body.open { display:block; }
+    pre { font-family:'JetBrains Mono',monospace; font-size:0.75rem; line-height:1.75; color:var(--t2); white-space:pre; overflow-x:auto; }
+    .kw{color:var(--amber);} .cls{color:#7dd3fc;} .str{color:#86efac;} .cm{color:var(--t3);} .fn{color:#c084fc;}
+
+    /* TAKEAWAYS */
+    .takeaways { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-top:2rem; }
+    .takeaway { background:var(--bg-1); padding:1.5rem; border-top:2px solid transparent; transition:border-top-color 0.15s,background 0.15s; }
+    .takeaway:hover { border-top-color:var(--blue); background:var(--bg-2); }
+    .ta-title { font-size:0.875rem; font-weight:500; color:var(--t1); margin-bottom:0.4rem; letter-spacing:-0.01em; }
+    .ta-body { font-size:0.8rem; color:var(--t2); line-height:1.7; font-weight:300; }
+
+    /* BTNS / CTA */
+    .btn { display:inline-flex; align-items:center; gap:0.375rem; font-family:'Inter',sans-serif; font-size:0.875rem; font-weight:500; padding:0.5625rem 1.125rem; border-radius:7px; text-decoration:none; transition:all 0.15s; white-space:nowrap; }
+    .btn-white { color:#000; background:var(--t1); }
+    .btn-white:hover { background:#d4d4d4; }
+    .btn-outline { color:var(--t2); background:transparent; border:1px solid var(--border); }
+    .btn-outline:hover { color:var(--t1); border-color:var(--border-hi); background:var(--bg-2); }
+    .cta-wrap { border-top:1px solid var(--border); background:var(--bg-1); }
+    .cta { display:grid; grid-template-columns:1fr auto; gap:3rem; align-items:center; padding:4rem 0; }
+    .cta-h { font-size:clamp(1.25rem,2.5vw,1.875rem); font-weight:600; letter-spacing:-0.03em; color:var(--t1); line-height:1.15; margin-bottom:0.5rem; }
+    .cta-p { font-size:0.875rem; font-weight:300; color:var(--t2); line-height:1.75; }
+    .cta-btns { display:flex; flex-direction:column; gap:0.625rem; align-items:flex-start; }
+    .footer-wrap { border-top:1px solid var(--border); }
+    .footer { display:flex; justify-content:space-between; align-items:center; padding:1.25rem 0; }
+    .footer-l { font-size:0.75rem; color:var(--t3); }
+    .footer-links { display:flex; gap:1.5rem; }
+    .footer-links a { font-size:0.75rem; color:var(--t3); text-decoration:none; transition:color 0.1s; }
+    .footer-links a:hover { color:var(--t1); }
+
+    @keyframes up { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    .fi { opacity:0; transform:translateY(10px); transition:opacity 0.5s,transform 0.5s; }
+    .fi.on { opacity:1; transform:translateY(0); }
+
+    @media(max-width:800px){
+      .meta-row { grid-template-columns:1fr 1fr; }
+      .meta-cell { border-right:none; border-bottom:1px solid var(--border); }
+      .two-col,.onto-stats,.domain-grid,.scenario-grid,.takeaways { grid-template-columns:1fr; }
+      .cta { grid-template-columns:1fr; }
+      .footer { flex-direction:column; gap:1rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="index.html" class="nav-name">Nevin Kohler</a>
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">Nevin Kohler</a>
+    <div class="nav-sep"></div>
     <ul class="nav-links">
-      <li><a href="index.html#about">About</a></li>
+      <li><a href="about.html">About</a></li>
       <li><a href="index.html#portfolio" class="active">Portfolio</a></li>
       <li><a href="index.html#contact">Contact</a></li>
     </ul>
-  </nav>
+  </div>
+  <div class="nav-right">
+    <span class="badge">Available for work</span>
+    <a href="/cdn-cgi/l/email-protection#f9979c8f9097b9979c8f9097929691959c8bd79a9694" class="btn-nav">Get in touch</a>
+  </div>
+</nav>
+
+<div class="page">
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-inner">
-      <div class="breadcrumb">
-        <a href="index.html#portfolio">Portfolio</a>
-        <span class="breadcrumb-sep">/</span>
-        <span>Banking Domain Portfolio</span>
+    <div class="breadcrumb"><a href="index.html#portfolio">Portfolio</a><span class="breadcrumb-sep">/</span><span>Financial Domain Semantic Layer</span></div>
+    <span class="hero-tag">Banking Domain</span>
+    <h1 class="hero-h1">Financial Domain<br/>Semantic Layer</h1>
+    <p class="hero-p">A three-layer knowledge framework — taxonomy, ontology, and knowledge graph — built to ground enterprise AI agents in accurate, governed banking domain knowledge aligned to FIBO.</p>
+  </section>
+
+  <!-- META -->
+  <div style="padding:2rem 0;" class="fi">
+    <div class="meta-row">
+      <div class="meta-cell"><div class="meta-n">134</div><div class="meta-l">Governed terms</div></div>
+      <div class="meta-cell"><div class="meta-n">83</div><div class="meta-l">OWL classes</div></div>
+      <div class="meta-cell"><div class="meta-n">7</div><div class="meta-l">Knowledge domains</div></div>
+      <div class="meta-cell"><div class="meta-n">21</div><div class="meta-l">Metadata columns</div></div>
+    </div>
+    <div class="tech-row">
+      <span class="tech-label">Stack</span>
+      <span class="tech-tag">SKOS</span><span class="tech-tag">OWL / Turtle</span><span class="tech-tag">RDF</span><span class="tech-tag">FIBO</span><span class="tech-tag">SPARQL</span><span class="tech-tag">Neo4j / Cypher</span><span class="tech-tag">Protégé</span>
+    </div>
+  </div>
+
+  <!-- CONTEXT -->
+  <section class="section fi">
+    <div class="two-col">
+      <div>
+        <p class="section-label">The problem</p>
+        <h2 class="section-h">Why this exists</h2>
+        <p class="section-p" style="margin-bottom:1.25rem;">AI agents operating in banking hallucinate because the knowledge layer underneath them is informal or absent. Terms like "non-performing loan," "beneficial owner," and "Tier 1 capital" mean specific, legally significant things.</p>
+        <p style="font-size:0.9rem;font-weight:300;color:var(--t2);line-height:1.8;">This portfolio demonstrates the full semantic stack required to ground a financial AI system — governed SKOS taxonomy, formal OWL ontology, and instantiated Neo4j knowledge graph — all aligned to FIBO and designed to plug directly into a RAG pipeline or agentic architecture.</p>
       </div>
-      <p class="hero-eyebrow">Case Study — Financial Services</p>
-      <h1 class="hero-headline">
-        A complete <em>semantic knowledge layer</em><br/>for enterprise AI in banking.
-      </h1>
-      <p class="hero-sub">
-        A three-part portfolio artifact — taxonomy, ontology, and knowledge graph — built to demonstrate how formal domain modeling grounds AI agents in accurate, governed banking knowledge. Designed to the standards a financial institution would actually deploy.
-      </p>
-      <div class="hero-stats">
-        <div class="stat">
-          <div class="stat-number">134</div>
-          <div class="stat-label">Governed Terms</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">83</div>
-          <div class="stat-label">OWL Classes</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">7</div>
-          <div class="stat-label">Knowledge Domains</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">21</div>
-          <div class="stat-label">Metadata Columns</div>
+      <div>
+        <p class="section-label">What this demonstrates</p>
+        <h2 class="section-h">Key capabilities</h2>
+        <div class="meta-table-wrap">
+          <div class="meta-table-row"><span class="mt-key">FIBO alignment</span><span class="mt-val">Every term mapped for interoperability</span></div>
+          <div class="meta-table-row"><span class="mt-key">AI-ready metadata</span><span class="mt-val">Canonical defs + usage constraints for LLM grounding</span></div>
+          <div class="meta-table-row"><span class="mt-key">Governance design</span><span class="mt-val">Steward roles, approval workflows, lifecycle states</span></div>
+          <div class="meta-table-row"><span class="mt-key">Full OWL formalism</span><span class="mt-val">Restrictions, inverse properties, SKOS bridge</span></div>
+          <div class="meta-table-row"><span class="mt-key">Queryable KG</span><span class="mt-val">6 customers, AML/SAR scenario, 7 Cypher queries</span></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- TECH STRIP -->
-  <div class="overview-strip">
-    <span class="strip-label">Technologies</span>
-    <div class="strip-tags">
-      <span class="strip-tag">SKOS</span>
-      <span class="strip-tag">OWL / Turtle</span>
-      <span class="strip-tag">RDF</span>
-      <span class="strip-tag">FIBO</span>
-      <span class="strip-tag">SPARQL</span>
-      <span class="strip-tag">Neo4j / Cypher</span>
-      <span class="strip-tag">Protégé</span>
-      <span class="strip-tag">Banking Domain</span>
-    </div>
-  </div>
-
-  <!-- CONTEXT -->
-  <div class="content-wrap">
-    <section class="context-section fade-in">
+  <!-- ARTIFACT 1 -->
+  <section class="section fi">
+    <div class="artifact-num">artifact / 01</div>
+    <div class="artifact-title">Banking Domain Taxonomy</div>
+    <div class="artifact-file">banking_taxonomy_v3.xlsx</div>
+    <div class="two-col">
       <div>
-        <p class="section-label">The Problem</p>
-        <h2 class="section-headline">Financial AI needs domain knowledge it can actually trust.</h2>
-        <div class="prose">
-          <p>AI agents operating in banking — whether surfacing credit risk, flagging AML anomalies, or answering customer queries — routinely hallucinate because the underlying knowledge layer is informal or absent. Terms like "non-performing loan," "beneficial owner," or "Tier 1 capital" mean specific, legally significant things. A model that doesn't know that is a liability.</p>
-          <p>This portfolio demonstrates the full semantic stack required to ground a financial AI system: a governed SKOS taxonomy, a formal OWL ontology, and an instantiated Neo4j knowledge graph — all aligned to FIBO (the Financial Industry Business Ontology) and designed to plug directly into a RAG pipeline or agentic architecture.</p>
+        <p style="font-size:0.9rem;font-weight:300;color:var(--t2);line-height:1.8;margin-bottom:1.5rem;">A SKOS-based taxonomy of 134 banking concepts across seven domains. Each term carries 21 metadata columns: plain-language definitions, AI canonical definitions, scope notes, FIBO alignment, usage constraints, governance fields, and lifecycle state. Structured to ingest into Alation, Collibra, or a RAG pipeline.</p>
+        <div class="domain-grid">
+          <div class="domain-cell"><div class="domain-name">Customers &amp; Parties</div><div class="domain-desc">Entity types, ownership, PEP status</div></div>
+          <div class="domain-cell"><div class="domain-name">Accounts</div><div class="domain-desc">Deposit, credit, investment products</div></div>
+          <div class="domain-cell"><div class="domain-name">Transactions</div><div class="domain-desc">Payment types, channels, events</div></div>
+          <div class="domain-cell"><div class="domain-name">Credit &amp; Risk</div><div class="domain-desc">PD, LTV, ECL, Basel III metrics</div></div>
+          <div class="domain-cell"><div class="domain-name">Regulatory &amp; Compliance</div><div class="domain-desc">AML, KYC, BSA, SAR workflows</div></div>
+          <div class="domain-cell"><div class="domain-name">Financial Metrics</div><div class="domain-desc">NIM, CECL, capital adequacy</div></div>
+          <div class="domain-cell" style="grid-column:1/-1"><div class="domain-name">Data &amp; Technology</div><div class="domain-desc">Semantic layer, data lineage, catalog integration, AI/ML</div></div>
         </div>
       </div>
-      <div class="context-aside">
-        <p class="aside-title">What This Portfolio Demonstrates</p>
-        <ul class="aside-list">
-          <li class="aside-item">
-            <div class="aside-dot"></div>
-            <p class="aside-text"><strong>FIBO alignment</strong> — terms mapped to the Financial Industry Business Ontology for interoperability with industry standards</p>
-          </li>
-          <li class="aside-item">
-            <div class="aside-dot"></div>
-            <p class="aside-text"><strong>AI-ready metadata</strong> — canonical definitions, usage constraints, and scope notes formatted for LLM consumption</p>
-          </li>
-          <li class="aside-item">
-            <div class="aside-dot"></div>
-            <p class="aside-text"><strong>Governance design</strong> — steward roles, approval workflows, and lifecycle states built into the taxonomy itself</p>
-          </li>
-          <li class="aside-item">
-            <div class="aside-dot"></div>
-            <p class="aside-text"><strong>Full OWL formalism</strong> — restrictions, inverse properties, and SKOS ConceptScheme bridging, openable in Protégé</p>
-          </li>
-          <li class="aside-item">
-            <div class="aside-dot"></div>
-            <p class="aside-text"><strong>Queryable knowledge graph</strong> — 6 synthetic customers, AML/SAR scenarios, fraud events, and 7 analytical Cypher queries</p>
-          </li>
-        </ul>
-      </div>
-    </section>
-  </div>
-
-  <div class="section-divider"></div>
-
-  <!-- ARTIFACT 1: TAXONOMY -->
-  <div class="content-wrap">
-    <section class="artifact-section fade-in">
-      <div class="artifact-header">
-        <div class="artifact-number">01</div>
-        <div class="artifact-meta">
-          <p class="artifact-label">Artifact One</p>
-          <h2 class="artifact-title">Banking Domain Taxonomy</h2>
-          <p class="artifact-file">banking_taxonomy_v3.xlsx</p>
+      <div>
+        <div class="meta-table-wrap">
+          <div class="meta-table-head">21 metadata columns — selected</div>
+          <div class="meta-table-row"><span class="mt-key">preferred_label</span><span class="mt-val">Canonical display name</span></div>
+          <div class="meta-table-row"><span class="mt-key">definition</span><span class="mt-val">Plain-language business definition</span></div>
+          <div class="meta-table-row"><span class="mt-key">ai_canonical_def</span><span class="mt-val">Structured definition for LLM grounding</span></div>
+          <div class="meta-table-row"><span class="mt-key">scope_note</span><span class="mt-val">Usage boundaries and edge cases</span></div>
+          <div class="meta-table-row"><span class="mt-key">broader_concept</span><span class="mt-val">SKOS broader hierarchy link</span></div>
+          <div class="meta-table-row"><span class="mt-key">fibo_alignment</span><span class="mt-val">FIBO namespace URI mapping</span></div>
+          <div class="meta-table-row"><span class="mt-key">usage_constraints</span><span class="mt-val">AI model usage restrictions</span></div>
+          <div class="meta-table-row"><span class="mt-key">lifecycle_state</span><span class="mt-val">Draft / Active / Deprecated</span></div>
+          <div class="meta-table-row"><span class="mt-key">data_steward</span><span class="mt-val">Governance ownership role</span></div>
+          <div class="meta-table-row"><span class="mt-key">change_note</span><span class="mt-val">Audit trail for term changes</span></div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <div class="artifact-body-two-col">
-        <div>
-          <div class="prose">
-            <p>A SKOS-based taxonomy of 134 banking concepts organized across seven domains. Each term is documented with 21 metadata columns covering everything from plain-language definitions to AI canonical definitions, governance fields, FIBO alignment mappings, and usage constraints designed for LLM grounding.</p>
-            <p>The structure follows SKOS best practices — broader/narrower hierarchies, related terms, scope notes, and change notes — while extending the model with banking-specific governance metadata that data catalog tools like Alation or Collibra can ingest directly.</p>
-          </div>
-
-          <h4 style="font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--warm-light);font-weight:500;margin: 2rem 0 0.75rem;">Seven Knowledge Domains</h4>
-          <div class="domain-grid">
-            <div class="domain-card">
-              <div class="domain-name">Customers &amp; Parties</div>
-              <div class="domain-count">Entity types, ownership, PEP status</div>
-            </div>
-            <div class="domain-card">
-              <div class="domain-name">Accounts</div>
-              <div class="domain-count">Deposit, credit, investment products</div>
-            </div>
-            <div class="domain-card">
-              <div class="domain-name">Transactions</div>
-              <div class="domain-count">Payment types, channels, events</div>
-            </div>
-            <div class="domain-card">
-              <div class="domain-name">Credit &amp; Risk</div>
-              <div class="domain-count">PD, LTV, ECL, Basel III metrics</div>
-            </div>
-            <div class="domain-card">
-              <div class="domain-name">Regulatory &amp; Compliance</div>
-              <div class="domain-count">AML, KYC, BSA, SAR workflows</div>
-            </div>
-            <div class="domain-card">
-              <div class="domain-name">Financial Metrics</div>
-              <div class="domain-count">NIM, CECL, capital adequacy</div>
-            </div>
-            <div class="domain-card domain-card--full" style="grid-column:1/-1;">
-              <div class="domain-name">Data &amp; Technology</div>
-              <div class="domain-count">Semantic layer, data lineage, catalog integration</div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="meta-columns-showcase">
-            <p class="meta-col-label">// 21 Metadata Columns — Selected</p>
-            <div class="meta-cols">
-              <div class="meta-col-row"><span class="meta-col-name">preferred_label</span><span class="meta-col-desc">Canonical display name</span></div>
-              <div class="meta-col-row"><span class="meta-col-name">definition</span><span class="meta-col-desc">Plain-language business definition</span></div>
-              <div class="meta-col-row"><span class="meta-col-name">ai_canonical_def</span><span class="meta-col-desc">Structured definition for LLM grounding</span></div>
-              <div class="meta-col-row"><span class="meta-col-name">scope_note</span><span class="meta-col-desc">Usage boundaries and edge cases</span></div>
-              <div class="meta-col-row"><span class="meta-col-name">broader_concept</span><span class="meta-col-desc">SKOS broader hierarchy link</span></div>
-              <div class="meta-col-row"><span class="meta-col-name">related_concepts</span><span class="meta-col-desc">SKOS related term links</span></div>
-              <div class="meta-col-row"><span class="meta-col-name">fibo_alignment</span><span class="meta-col-desc">FIBO namespace URI mapping</span></div>
-              <div class="meta-col-row"><span class="meta-col-name">usage_constraints</span><span class="meta-col-desc">AI model usage restrictions</span></div>
-              <div class="meta-col-row"><span class="meta-col-name">domain</span><span class="meta-col-desc">One of seven knowledge domains</span></div>
-              <div class="meta-col-row"><span class="meta-col-name">lifecycle_state</span><span class="meta-col-desc">Draft / Active / Deprecated</span></div>
-              <div class="meta-col-row"><span class="meta-col-name">data_steward</span><span class="meta-col-desc">Governance ownership role</span></div>
-              <div class="meta-col-row"><span class="meta-col-name">change_note</span><span class="meta-col-desc">Audit trail for term changes</span></div>
-            </div>
-          </div>
-        </div>
+  <!-- ARTIFACT 2 -->
+  <section class="section fi">
+    <div class="artifact-num">artifact / 02</div>
+    <div class="artifact-title">Banking Domain OWL Ontology</div>
+    <div class="artifact-file">banking_domain.ttl — Turtle syntax · Protégé-compatible</div>
+    <div class="onto-stats">
+      <div class="onto-stat"><div class="onto-n">83</div><div class="onto-l">OWL Classes</div></div>
+      <div class="onto-stat"><div class="onto-n">14</div><div class="onto-l">Object Properties</div></div>
+      <div class="onto-stat"><div class="onto-n">10</div><div class="onto-l">Datatype Properties</div></div>
+      <div class="onto-stat"><div class="onto-n">6</div><div class="onto-l">Annotation Properties</div></div>
+    </div>
+    <div class="two-col">
+      <div>
+        <p style="font-size:0.9rem;font-weight:300;color:var(--t2);line-height:1.8;">A formal OWL ontology in Turtle syntax with subclass hierarchies, object properties, OWL restrictions, and a SKOS ConceptScheme bridge connecting ontology to taxonomy. FIBO namespaces imported throughout. Opens and reasons in Protégé — inference-clean, no unsatisfiable classes.</p>
       </div>
-    </section>
-  </div>
-
-  <div class="section-divider"></div>
-
-  <!-- ARTIFACT 2: ONTOLOGY -->
-  <div class="content-wrap">
-    <section class="artifact-section fade-in">
-      <div class="artifact-header">
-        <div class="artifact-number">02</div>
-        <div class="artifact-meta">
-          <p class="artifact-label">Artifact Two</p>
-          <h2 class="artifact-title">Banking Domain OWL Ontology</h2>
-          <p class="artifact-file">banking_domain.ttl — Turtle syntax, Protégé-compatible</p>
+      <div class="log-block">
+        <div class="log-bar">
+          <span class="log-bar-title">banking_domain.ttl — excerpt</span>
         </div>
-      </div>
-
-      <div class="onto-stats">
-        <div class="onto-stat"><div class="onto-stat-n">83</div><div class="onto-stat-l">OWL Classes</div></div>
-        <div class="onto-stat"><div class="onto-stat-n">14</div><div class="onto-stat-l">Object Properties</div></div>
-        <div class="onto-stat"><div class="onto-stat-n">10</div><div class="onto-stat-l">Datatype Properties</div></div>
-        <div class="onto-stat"><div class="onto-stat-n">6</div><div class="onto-stat-l">Annotation Properties</div></div>
-      </div>
-
-      <div class="artifact-body-two-col">
-        <div class="prose">
-          <p>A formal OWL ontology in Turtle syntax that provides machine-readable, logically consistent definitions for the banking domain. The ontology declares classes with subclass hierarchies, object properties with domain/range constraints, OWL restrictions (cardinality, someValuesFrom, allValuesFrom), and a bridging SKOS ConceptScheme that connects the formal ontology to the taxonomy layer.</p>
-          <p>FIBO namespaces are imported throughout, ensuring the model is interoperable with the industry-standard financial ontology. Openable and reasoned in Protégé — inference-clean, no unsatisfiable classes.</p>
-        </div>
-        <div class="code-block">
-          <span class="code-filename">banking_domain.ttl</span>
-          <pre><span class="cm"># Prefixes</span>
-<span class="kw">@prefix</span> <span class="cls">bk:</span>    &lt;https://nevin-kohler.com/ontology/banking#&gt; .
-<span class="kw">@prefix</span> <span class="cls">fibo-be:</span> &lt;https://spec.edmcouncil.org/fibo/ontology/BE/&gt; .
-<span class="kw">@prefix</span> <span class="cls">skos:</span>  &lt;http://www.w3.org/2004/02/skos/core#&gt; .
-<span class="kw">@prefix</span> <span class="cls">owl:</span>   &lt;http://www.w3.org/2002/07/owl#&gt; .
-
-<span class="cm"># Class declaration with FIBO alignment</span>
+        <div class="log-lines">
+<pre><span class="cm"># Class with FIBO alignment + OWL restriction</span>
 <span class="cls">bk:NonPerformingLoan</span>
-  <span class="kw">a</span> <span class="prop">owl:Class</span> ;
-  <span class="prop">rdfs:subClassOf</span> <span class="cls">bk:Loan</span> ,
-    [ <span class="kw">a</span> <span class="prop">owl:Restriction</span> ;
-      <span class="prop">owl:onProperty</span> <span class="cls">bk:hasDelinquencyStatus</span> ;
-      <span class="prop">owl:someValuesFrom</span> <span class="cls">bk:DelinquencyStatus</span> ] ;
-  <span class="prop">skos:definition</span> <span class="str">"A loan where the borrower has failed to
-    make scheduled payments for 90+ days,
-    triggering credit risk classification."</span> ;
-  <span class="prop">rdfs:isDefinedBy</span> <span class="cls">fibo-be:LoanProducts</span> .
+  <span class="kw">a</span> owl:Class ;
+  rdfs:subClassOf <span class="cls">bk:Loan</span> ,
+    [ <span class="kw">a</span> owl:Restriction ;
+      owl:onProperty <span class="cls">bk:hasDelinquencyStatus</span> ;
+      owl:someValuesFrom <span class="cls">bk:DelinquencyStatus</span> ] ;
+  skos:definition <span class="str">"Loan where borrower has failed
+    scheduled payments for 90+ days."</span> ;
+  rdfs:isDefinedBy <span class="cls">fibo-be:LoanProducts</span> .
 
 <span class="cm"># Object property with inverse</span>
 <span class="cls">bk:hasCollateral</span>
-  <span class="kw">a</span> <span class="prop">owl:ObjectProperty</span> ;
-  <span class="prop">owl:inverseOf</span> <span class="cls">bk:collateralizesLoan</span> ;
-  <span class="prop">rdfs:domain</span> <span class="cls">bk:SecuredLoan</span> ;
-  <span class="prop">rdfs:range</span>  <span class="cls">bk:CollateralAsset</span> .</pre>
+  <span class="kw">a</span> owl:ObjectProperty ;
+  owl:inverseOf <span class="cls">bk:collateralizesLoan</span> ;
+  rdfs:domain <span class="cls">bk:SecuredLoan</span> ;
+  rdfs:range  <span class="cls">bk:CollateralAsset</span> .</pre>
         </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 
-  <div class="section-divider"></div>
+  <!-- ARTIFACT 3 -->
+  <section class="section fi">
+    <div class="artifact-num">artifact / 03</div>
+    <div class="artifact-title">Banking Knowledge Graph</div>
+    <div class="artifact-file">banking_knowledge_graph.cypher — Neo4j · runnable in Neo4j Sandbox</div>
+    <p style="font-size:0.9rem;font-weight:300;color:var(--t2);line-height:1.8;max-width:680px;margin-bottom:2rem;">Six synthetic customers across banking segments, their accounts and loans, AML alerts escalating to a SAR filing, a fraud event, and collateral relationships — rich enough to run the analytical queries a bank's AI team would actually need.</p>
 
-  <!-- ARTIFACT 3: KNOWLEDGE GRAPH -->
-  <div class="content-wrap">
-    <section class="artifact-section fade-in">
-      <div class="artifact-header">
-        <div class="artifact-number">03</div>
-        <div class="artifact-meta">
-          <p class="artifact-label">Artifact Three</p>
-          <h2 class="artifact-title">Banking Knowledge Graph</h2>
-          <p class="artifact-file">banking_knowledge_graph.cypher — Neo4j / runnable in Neo4j Sandbox</p>
-        </div>
+    <div class="scenario-grid">
+      <div class="scenario"><p class="sc-type">Retail Banking</p><p class="sc-name">Margaret Chen</p><p class="sc-desc">Checking, savings, mortgage — standard retail profile, baseline for queries</p></div>
+      <div class="scenario"><p class="sc-type">PEP / AML Risk</p><p class="sc-name">David Okonkwo</p><p class="sc-desc">Politically Exposed Person — two international wires trigger AML alerts escalating to SAR filing</p></div>
+      <div class="scenario"><p class="sc-type">Private Banking</p><p class="sc-name">Sarah Whitfield</p><p class="sc-desc">High-net-worth client — account takeover fraud event flagged and blocked</p></div>
+      <div class="scenario"><p class="sc-type">Non-Performing Loan</p><p class="sc-name">Robert Mazur</p><p class="sc-desc">Delinquent mortgage, 90+ DPD — active collections, collateral LTV tracked</p></div>
+      <div class="scenario"><p class="sc-type">Commercial Banking</p><p class="sc-name">Apex Manufacturing</p><p class="sc-desc">Small business — revolving credit, equipment loan, beneficial ownership graph</p></div>
+      <div class="scenario"><p class="sc-type">Middle Market CRE</p><p class="sc-name">Meridian Properties</p><p class="sc-desc">Commercial real estate — CRE loan, collateral appraisal, LTV, capital reserves</p></div>
+    </div>
+
+    <p class="section-label" style="margin-bottom:0.75rem;">Analytical queries</p>
+    <div class="queries">
+      <div class="q-row">
+        <div class="q-header" onclick="toggleQ(this)"><span class="q-title">01 — Non-performing loan analysis with collateral</span><span class="q-toggle">expand</span></div>
+        <div class="q-body"><pre><span class="cm">// Find all NPL customers, loans, collateral, and LTV</span>
+<span class="kw">MATCH</span> (c:<span class="cls">Customer</span>)-[:<span class="fn">HAS_ACCOUNT</span>]-&gt;(a:<span class="cls">Account</span>)
+      -[:<span class="fn">HAS_LOAN</span>]-&gt;(l:<span class="cls">Loan</span> {status: <span class="str">'NonPerforming'</span>})
+<span class="kw">OPTIONAL MATCH</span> (l)-[:<span class="fn">SECURED_BY</span>]-&gt;(col:<span class="cls">Collateral</span>)
+<span class="kw">RETURN</span> c.name, l.loanId, l.balance,
+       l.daysDelinquent, col.appraisedValue, l.ltvRatio
+<span class="kw">ORDER BY</span> l.daysDelinquent <span class="kw">DESC</span></pre></div>
       </div>
-
-      <div class="prose" style="max-width:720px; margin-bottom:2.5rem;">
-        <p>A Neo4j knowledge graph instantiating the ontology with a coherent synthetic banking scenario — six customers across customer segments, their accounts and loans, a set of transactions, AML alerts escalating to a SAR filing, a fraud event, and collateral relationships. Rich enough to run the analytical queries a bank's AI team would actually need.</p>
-      </div>
-
-      <h4 style="font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--warm-light);font-weight:500;margin-bottom:1rem;">Synthetic Scenario — Six Customers</h4>
-      <div class="scenario-grid">
-        <div class="scenario-card">
-          <p class="scenario-card-type">Retail Banking</p>
-          <p class="scenario-card-name">Margaret Chen</p>
-          <p class="scenario-card-desc">Checking, savings, mortgage — standard retail profile used as baseline</p>
-        </div>
-        <div class="scenario-card">
-          <p class="scenario-card-type">PEP / AML Risk</p>
-          <p class="scenario-card-name">David Okonkwo</p>
-          <p class="scenario-card-desc">Politically Exposed Person — two international wires trigger AML alerts escalating to SAR filing</p>
-        </div>
-        <div class="scenario-card">
-          <p class="scenario-card-type">Private Banking / HNW</p>
-          <p class="scenario-card-name">Sarah Whitfield</p>
-          <p class="scenario-card-desc">High-net-worth private banking client — account takeover fraud event flagged and blocked</p>
-        </div>
-        <div class="scenario-card">
-          <p class="scenario-card-type">Non-Performing Loan</p>
-          <p class="scenario-card-name">Robert Mazur</p>
-          <p class="scenario-card-desc">Delinquent mortgage, 90+ days past due — active collections action, collateral LTV tracked</p>
-        </div>
-        <div class="scenario-card">
-          <p class="scenario-card-type">Commercial Banking</p>
-          <p class="scenario-card-name">Apex Manufacturing</p>
-          <p class="scenario-card-desc">Small business — revolving credit facility, equipment loan, beneficial ownership graph</p>
-        </div>
-        <div class="scenario-card">
-          <p class="scenario-card-type">Middle Market CRE</p>
-          <p class="scenario-card-name">Meridian Properties</p>
-          <p class="scenario-card-desc">Commercial real estate — CRE loan with collateral appraisal, LTV, and capital reserve requirements</p>
-        </div>
-      </div>
-
-      <h4 style="font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--warm-light);font-weight:500;margin:2.5rem 0 0.5rem;">7 Analytical Queries — Click to Expand</h4>
-      <div class="query-grid">
-
-        <div class="query-card">
-          <div class="query-header" onclick="toggleQuery(this)">
-            <span class="query-title">1. Non-Performing Loan Analysis with Collateral</span>
-            <span class="query-toggle">+ expand</span>
-          </div>
-          <div class="query-body">
-            <pre><span class="cm">// Find all NPL customers, their loans, collateral, and LTV</span>
-<span class="kw">MATCH</span> (c:<span class="cls">Customer</span>)-[:<span class="prop">HAS_ACCOUNT</span>]-&gt;(a:<span class="cls">Account</span>)
-      -[:<span class="prop">HAS_LOAN</span>]-&gt;(l:<span class="cls">Loan</span> {status: <span class="str">'NonPerforming'</span>})
-<span class="kw">OPTIONAL MATCH</span> (l)-[:<span class="prop">SECURED_BY</span>]-&gt;(col:<span class="cls">Collateral</span>)
-<span class="kw">RETURN</span> c.name, l.loanId, l.balance, l.daysDelinquent,
-       col.type, col.appraisedValue, l.ltvRatio
-<span class="kw">ORDER BY</span> l.daysDelinquent <span class="kw">DESC</span></pre>
-          </div>
-        </div>
-
-        <div class="query-card">
-          <div class="query-header" onclick="toggleQuery(this)">
-            <span class="query-title">2. Full AML / PEP Chain — Alerts to SAR</span>
-            <span class="query-toggle">+ expand</span>
-          </div>
-          <div class="query-body">
-            <pre><span class="cm">// Trace PEP → accounts → transactions → AML alerts → SAR</span>
+      <div class="q-row">
+        <div class="q-header" onclick="toggleQ(this)"><span class="q-title">02 — Full AML / PEP chain → SAR filing</span><span class="q-toggle">expand</span></div>
+        <div class="q-body"><pre><span class="cm">// Trace PEP → accounts → transactions → AML alerts → SAR</span>
 <span class="kw">MATCH</span> (c:<span class="cls">Customer</span> {isPEP: <span class="str">true</span>})
-      -[:<span class="prop">HAS_ACCOUNT</span>]-&gt;(a:<span class="cls">Account</span>)
-      -[:<span class="prop">HAS_TRANSACTION</span>]-&gt;(t:<span class="cls">Transaction</span>)
-      -[:<span class="prop">TRIGGERED</span>]-&gt;(alert:<span class="cls">AMLAlert</span>)
-<span class="kw">OPTIONAL MATCH</span> (alert)-[:<span class="prop">ESCALATED_TO</span>]-&gt;(sar:<span class="cls">SARFiling</span>)
-<span class="kw">RETURN</span> c.name, c.pepStatus, t.amount, t.country,
-       alert.alertType, alert.riskScore, sar.filingDate</pre>
-          </div>
-        </div>
-
-        <div class="query-card">
-          <div class="query-header" onclick="toggleQuery(this)">
-            <span class="query-title">3. Multi-Risk Customer Flagging</span>
-            <span class="query-toggle">+ expand</span>
-          </div>
-          <div class="query-body">
-            <pre><span class="cm">// Find customers with 2+ risk flags across any risk type</span>
+      -[:<span class="fn">HAS_ACCOUNT</span>]-&gt;(a:<span class="cls">Account</span>)
+      -[:<span class="fn">HAS_TRANSACTION</span>]-&gt;(t:<span class="cls">Transaction</span>)
+      -[:<span class="fn">TRIGGERED</span>]-&gt;(alert:<span class="cls">AMLAlert</span>)
+<span class="kw">OPTIONAL MATCH</span> (alert)-[:<span class="fn">ESCALATED_TO</span>]-&gt;(sar:<span class="cls">SARFiling</span>)
+<span class="kw">RETURN</span> c.name, c.pepStatus, t.amount,
+       alert.alertType, alert.riskScore, sar.filingDate</pre></div>
+      </div>
+      <div class="q-row">
+        <div class="q-header" onclick="toggleQ(this)"><span class="q-title">03 — Multi-risk customer flagging</span><span class="q-toggle">expand</span></div>
+        <div class="q-body"><pre><span class="cm">// Find customers with 2+ risk flags across any risk type</span>
 <span class="kw">MATCH</span> (c:<span class="cls">Customer</span>)
 <span class="kw">WITH</span> c,
   <span class="kw">CASE WHEN</span> c.isPEP <span class="kw">THEN</span> 1 <span class="kw">ELSE</span> 0 <span class="kw">END</span> +
-  <span class="kw">CASE WHEN</span> (c)-[:<span class="prop">HAS_ACCOUNT</span>]-&gt;()-[:<span class="prop">HAS_LOAN</span>]-&gt;
+  <span class="kw">CASE WHEN</span> (c)-[:<span class="fn">HAS_ACCOUNT</span>]-&gt;()-[:<span class="fn">HAS_LOAN</span>]-&gt;
     (:<span class="cls">Loan</span> {status:<span class="str">'NonPerforming'</span>}) <span class="kw">THEN</span> 1 <span class="kw">ELSE</span> 0 <span class="kw">END</span> +
   <span class="kw">CASE WHEN</span> (c)-[*]-&gt;(:<span class="cls">AMLAlert</span>) <span class="kw">THEN</span> 1 <span class="kw">ELSE</span> 0 <span class="kw">END</span>
   <span class="kw">AS</span> riskScore
 <span class="kw">WHERE</span> riskScore &gt;= 2
 <span class="kw">RETURN</span> c.name, c.segment, riskScore
-<span class="kw">ORDER BY</span> riskScore <span class="kw">DESC</span></pre>
-          </div>
-        </div>
-
-        <div class="query-card">
-          <div class="query-header" onclick="toggleQuery(this)">
-            <span class="query-title">4. Beneficial Ownership Graph (Commercial)</span>
-            <span class="query-toggle">+ expand</span>
-          </div>
-          <div class="query-body">
-            <pre><span class="cm">// Resolve beneficial ownership chain for commercial entities</span>
+<span class="kw">ORDER BY</span> riskScore <span class="kw">DESC</span></pre></div>
+      </div>
+      <div class="q-row">
+        <div class="q-header" onclick="toggleQ(this)"><span class="q-title">04 — Beneficial ownership graph traversal</span><span class="q-toggle">expand</span></div>
+        <div class="q-body"><pre><span class="cm">// Resolve beneficial ownership chain for commercial entities</span>
 <span class="kw">MATCH</span> path = (owner:<span class="cls">Customer</span>)
-             -[r:<span class="prop">OWNS</span>*1..3]-&gt;
+             -[r:<span class="fn">OWNS</span>*1..3]-&gt;
              (entity:<span class="cls">CommercialEntity</span>)
 <span class="kw">RETURN</span> owner.name,
        [n <span class="kw">IN</span> nodes(path) | n.name] <span class="kw">AS</span> ownershipChain,
        [rel <span class="kw">IN</span> relationships(path) | rel.ownershipPct]
-         <span class="kw">AS</span> ownershipPercentages</pre>
-          </div>
-        </div>
-
+         <span class="kw">AS</span> ownershipPercentages</pre></div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 
   <!-- TAKEAWAYS -->
-  <section class="takeaways-section fade-in">
-    <div style="max-width:1100px;margin:0 auto;">
-      <p class="section-label">Key Takeaways</p>
-      <h2 class="section-headline" style="max-width:600px;">What this demonstrates for an AI or data team.</h2>
-      <div class="takeaways-grid">
-        <div class="takeaway-card">
-          <h3>End-to-end semantic stack</h3>
-          <p>Most practitioners can do one layer well. This portfolio shows taxonomy, formal ontology, and knowledge graph working together as a coherent system — which is what a production AI knowledge layer actually requires.</p>
-        </div>
-        <div class="takeaway-card">
-          <h3>FIBO-aligned financial domain depth</h3>
-          <p>FIBO alignment isn't checkbox work — it requires understanding the ontology's namespace structure, import patterns, and how its classes map to real banking concepts. The portfolio demonstrates genuine domain fluency, not surface familiarity.</p>
-        </div>
-        <div class="takeaway-card">
-          <h3>Governance built in from the start</h3>
-          <p>Steward roles, lifecycle states, approval workflows, and audit fields are embedded in the taxonomy model — not afterthoughts. That's the difference between a semantic artifact and a governable enterprise asset.</p>
-        </div>
-        <div class="takeaway-card">
-          <h3>AI-ready, not just correct</h3>
-          <p>Every term has a structured <code style="font-family:'DM Mono',monospace;font-size:0.8em;color:var(--amber)">ai_canonical_definition</code>, usage constraints, and scope notes specifically formatted for LLM grounding and RAG retrieval — not just human readability.</p>
-        </div>
+  <section class="section fi">
+    <p class="section-label">Takeaways</p>
+    <h2 class="section-h">What this demonstrates for an AI or data team</h2>
+    <div class="takeaways">
+      <div class="takeaway"><div class="ta-title">End-to-end semantic stack</div><p class="ta-body">Most practitioners can do one layer well. This portfolio shows taxonomy, formal ontology, and knowledge graph working as a coherent system — which is what a production AI knowledge layer requires.</p></div>
+      <div class="takeaway"><div class="ta-title">FIBO-aligned domain depth</div><p class="ta-body">FIBO alignment requires understanding the ontology's namespace structure, import patterns, and how its classes map to real banking concepts. This demonstrates genuine domain fluency, not surface familiarity.</p></div>
+      <div class="takeaway"><div class="ta-title">Governance built in from the start</div><p class="ta-body">Steward roles, lifecycle states, approval workflows, and audit fields embedded in the taxonomy model — not afterthoughts. The difference between a semantic artifact and a governable enterprise asset.</p></div>
+      <div class="takeaway"><div class="ta-title">AI-ready, not just correct</div><p class="ta-body">Every term has a structured <code style="font-family:'JetBrains Mono',monospace;font-size:0.8em;color:var(--blue);">ai_canonical_definition</code>, usage constraints, and scope notes formatted for LLM grounding and RAG retrieval — not just human readability.</p></div>
+    </div>
+  </section>
+
+</div><!-- /page -->
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="page">
+    <div class="cta fi">
+      <div>
+        <h2 class="cta-h">Need a knowledge layer for your AI system?</h2>
+        <p class="cta-p">This is the kind of work I do for AI teams in finance, healthcare, and regulated industries.</p>
+      </div>
+      <div class="cta-btns">
+        <a href="/cdn-cgi/l/email-protection#aac4cfdcc3c4eac4cfdcc3c4c1c5c2c6cfd884c9c5c7" class="btn btn-white">Get in touch →</a>
+        <a href="index.html#portfolio" class="btn btn-outline">← All projects</a>
       </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- BOTTOM CTA -->
-  <section class="bottom-cta">
-    <div>
-      <h2 class="bottom-cta-headline">
-        Need a knowledge layer<br/>for your <em>AI system?</em>
-      </h2>
-      <p class="bottom-cta-body">This is the kind of work I do for AI teams in finance, healthcare, and regulated industries. Let's talk about what you're building.</p>
+<div class="footer-wrap">
+  <div class="page">
+    <div class="footer">
+      <span class="footer-l">© 2026 Nevin Kohler · nevinkohler.com</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/nevinkohler/">LinkedIn</a><a href="https://github.com/nevin7">GitHub</a><a href="index.html#contact">Contact</a>
+      </div>
     </div>
-    <div class="btn-group">
-      <a href="index.html#contact" class="btn btn-primary">Get in Touch</a>
-      <a href="index.html#portfolio" class="btn btn-ghost-light">← All Projects</a>
-    </div>
-  </section>
+  </div>
+</div>
 
-  <!-- FOOTER -->
-  <footer>
-    <p class="footer-name">Nevin Kohler &nbsp;·&nbsp; AI Knowledge Systems</p>
-    <div class="footer-links">
-      <a href="#">LinkedIn</a>
-      <a href="#">GitHub</a>
-      <a href="index.html#contact">Contact</a>
-    </div>
-  </footer>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target);} }), {threshold:0.07});
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
 
-  <script>
-    // Scroll fade-in
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(el => {
-        if (el.isIntersecting) { el.target.classList.add('visible'); observer.unobserve(el.target); }
-      });
-    }, { threshold: 0.08 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-    // Query accordion
-    function toggleQuery(header) {
-      const body = header.nextElementSibling;
-      const toggle = header.querySelector('.query-toggle');
-      const isOpen = body.classList.contains('open');
-      // Close all
-      document.querySelectorAll('.query-body').forEach(b => b.classList.remove('open'));
-      document.querySelectorAll('.query-toggle').forEach(t => t.textContent = '+ expand');
-      // Open clicked if it was closed
-      if (!isOpen) {
-        body.classList.add('open');
-        toggle.textContent = '− collapse';
-      }
-    }
-  </script>
-
-</body>
-</html>
+  function toggleQ(header) {
+    const body = header.nextElementSibling;
+    const tog = header.querySelector('.q-toggle');
+    const isOpen = body.classList.contains('open');
+    document.querySelectorAll('.q-body').forEach(b => b.classList.remove('open'
